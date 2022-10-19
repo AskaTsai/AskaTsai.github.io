@@ -11,7 +11,7 @@
     <h2>我的照片</h2>
     <!-- TODO: Add link to myphoto -->
     <p>点击这里获取我的<a target="_blank" href="https://www.wzvtc.cn/index.html">更多靓照</a>.</p>
-    <a href="https://www.wzvtc.cn/index.html"><img src="../img/web_design/wuyanzhu.jpg" alt="温职吴彦祖"></a>
+    <a href="https://www.wzvtc.cn/index.html"><img src="../img/web_design/wuyanzhu.jpg" alt="温职吴彦祖" width="10%"></a>
 
   </section>
   <section>
@@ -23,7 +23,7 @@
       <li>冰美式</li>
     </ul>
     <figure>
-      <img src="../img/web_design/ice_coffee.jpg" alt="一杯冰美式">
+      <img src="../img/web_design/ice_coffee.jpg" alt="一杯冰美式" width="10%">
       <figcaption>不要轻易 <em>尝试</em> 冰美式</figcaption>
     </figure>
     <h3>我最讨厌的三件事:</h3>
@@ -33,8 +33,8 @@
       <li>叫我早睡早起</li>
     </ol>
     <figure>
-      <img src="../img/web_design/early_sleep_early_up.jpg" alt="早睡早起身体好">
-      <figcaption> 我终于实现 <strong>早睡早起</strong> 身体好。</figcaption>
+      <img src="../img/web_design/early_sleep_early_up.jpg" alt="早睡早起身体好" width="10%">
+      <figcaption> 我<mark>终于实现</mark> <strong>早睡早起</strong> 身体好。</figcaption>
     </figure>
   </section>
   <section>
@@ -51,7 +51,9 @@
         <input id="shy" type="checkbox" name="personality" value="shy"> <label for="shy">内向</label>
         <input id="peace" type="checkbox" name="personality" value="peace"> <label for="peace">不温不火</label>
       </fieldset>
-      <input type="text" name="photourl" placeholder="输入你的照片链接" required>
+      <p>姓名：<input type="text" name="name" placeholder="请输入你的姓名" required></p>
+      <p>手机号：<input type="text" name="phoneNumber" placeholder="请输入你的手机号" required></p>
+      <p>个人照：<input type="file" name="photoFile"></p>
       <button type="submit">提交</button>
     </form>
   </section>
