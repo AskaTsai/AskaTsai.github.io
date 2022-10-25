@@ -51,16 +51,22 @@
         <input id="shy" type="checkbox" name="personality" value="shy"> <label for="shy">内向</label>
         <input id="peace" type="checkbox" name="personality" value="peace"> <label for="peace">不温不火</label>
       </fieldset>
-      <p>姓名：<input type="text" name="name" placeholder="请输入你的姓名" required></p>
-      <p>手机号：<input type="text" name="phoneNumber" placeholder="请输入你的手机号" required></p>
-      <p>个人照：<input type="file" name="photoFile"></p>
+      <p><label for="name">姓名：</label><input id="name" type="text" name="name" placeholder="请输入你的姓名" required></p>
+      <p><label for="phone">手机号：</label><input id="phone" type="text" name="phoneNumber" placeholder="请输入你的手机号" required></p>
+      <p><label for="pic">个人照：</label><input id="pic" type="file" name="photoFile"></p>
+      <p><label for="class">所在班级：</label>
+        <select id="class" name="class">
+          <option value="2201">大数据2201</option>
+          <option value="2202">大数据2202</option>
+        </select>
+      </p>
       <button type="submit">提交</button>
     </form>
   </section>
 </main>
 <footer>
   <p>
-    没有版权，随便抄 - <a href="https://www.wzvtc.cn/index.html">askatsoi@163.com</a>
+    Copyright©<a href="https://www.wzvtc.cn/index.html">温州职业技术学院</a>_蔡顺达
   </p>
 </footer>
 </body>
