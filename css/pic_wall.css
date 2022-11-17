@@ -20,7 +20,7 @@ body {
     border-bottom: 4px solid #fdb347;
 }
 
-.gallery {
+.wall {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -32,7 +32,7 @@ body {
     padding: 20px 10px;
 }
 
-.gallery img {
+.wall img {
     width: 100%;
     max-width: 350px;
     height: 300px;
@@ -40,7 +40,7 @@ body {
     border-radius: 10px;
 }
 
-.gallery::after {
+.wall::after {
     content: "";
     width: 350px;
 }
