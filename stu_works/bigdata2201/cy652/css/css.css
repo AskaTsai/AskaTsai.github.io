@@ -1,0 +1,360 @@
+/*重设margin及padding的默认值*/
+*{
+	margin: 0;
+	padding: 0;
+}
+/*设置标题样式*/
+h1{
+    text-align: center;
+    color: #dadada;
+    font-family: 华文行楷, serif;
+    font-size: 50px;
+    padding: 15px;
+    margin-bottom: 0;
+}
+h2{
+    text-align: center;
+    color: #000000;
+    font-family: 隶书, serif;
+    font-size: 50px;
+    padding: 5px;
+}
+a{
+	text-decoration: none;
+}
+/*对成员展示窗口的设置*/
+.container {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    margin:10px auto 10px auto;
+    box-shadow: 0 0 5px green;
+    overflow: hidden;
+}
+.container .member_show {
+    position: absolute;
+    width: 3600px;
+    height: 400px;
+    z-index: 1;
+}
+.container .member_show img {
+    float: left;
+    width: 600px;
+    height: 400px;
+}
+.container .buttons {
+    position: absolute;
+    right: 5px;
+    bottom:40px;
+    width: 150px;
+    height: 10px;
+    z-index: 2;
+}
+.container .buttons span {
+    margin-left: 1px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #002980;
+    text-align: center;
+    color:white;
+    cursor: pointer;
+}
+.container .buttons span.on{
+    background-color: red;
+}
+.container .arrow {
+    position: absolute;
+    top: 35%;
+    color: #800000;
+    padding:0 14px;
+    border-radius: 50%;
+    font-size: 50px;
+    z-index: 2;
+    display: none;
+}
+.container .arrow_left {
+    left: 10px;
+}
+.container .arrow_right {
+    right: 10px;
+}
+.container:hover .arrow {
+    display: block;
+}
+.container .arrow:hover {
+    background-color: rgba(0,0,0,0.2);
+}
+/*清除所有列表前的符号*/
+li{
+	list-style: none;
+}
+/*设置背景*/
+body{
+    background: url(../img/back.jpg) space;
+    background-size: cover;
+}
+/*设置选择框样式*/
+.title{
+    width: 100%;
+    height: 75px;
+    margin: 15px 0 46px;
+    background: #726f6f;
+    opacity: 0.7;
+    position: relative;
+}
+.title img{
+    width: 27%;
+    height: 75px;
+    float: left;
+}
+.title .ul1{
+    width: 854px;
+    height: 100%;
+    float: right;
+    position: relative;
+}
+.title ul li{
+    float: left;
+}
+.title ul li a{
+    font-size: 18px;
+    color: #fff;
+    padding: 23px;
+    display: block;
+    border: 2px solid #706d6f;
+}
+.title li a:hover{
+    color: #0000ff;
+}
+.title ul li ul{
+    position: absolute;
+    display: none;
+    background-color: #716e6f;
+    width: 122px;
+}
+.title ul li ul a{
+    text-align: center;
+}
+.title ul li ul li{
+    float: none;
+}
+.title ul li ul li a{
+    border-top:1px dashed silver ;
+}
+.title ul li:hover ul{
+    display: block;
+}
+.Member ul{
+    width: 100%;
+    height: 100%;
+}
+.Member ul li{
+    text-align: center;
+    margin-right: 80px;
+    margin-left: 80px;
+    font-size: 40px;
+}
+.Member ul img {
+    float: left;
+    width: 25%;
+    height: 220px;
+    margin-right: 42px;
+    margin-left: 42px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.content{
+    width: 1198px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.background{
+	width: 100%;
+	height: 1250px;
+    background:url(../img/back2.jpg) ;
+    background-size: cover;
+    margin-top: 48px;
+	overflow: hidden;
+}
+.background h3{
+	font-style: normal;
+	font-weight: 500;
+	line-height: 56px;
+	font-size: 18px;
+	color: #343434;
+	border-bottom: 1px solid #000;
+	text-align: center;
+}
+.background p{
+	font-size: 14px;
+	color: #353535;
+	line-height: 28px;
+	text-indent: 2em;
+}
+.background_bed{
+	height: 1250px;
+	width: 380px;
+	float: left;
+	margin-top: 0;
+	border-right: 1px solid #dadada;
+    margin-left: 15px;
+}
+.background_bottom{
+    float: none;
+}
+.topic{
+    font-family: 华文行楷, serif;
+    font-size: 40px;
+    text-align: center;
+}
+.image2{
+    float: left;
+    width: 45%;
+}
+.image3{
+    width: 90%;
+    margin: 10% 20px 10% auto;
+}
+.box{
+    display: inline-block;
+}
+.module{
+    width: 50%;
+}
+.member,
+.little_show{
+	height: 100%;
+	width: 304px;
+	margin-top: 100px;
+    margin-left: 0;
+    margin-right: 0;
+}
+.member img,
+.little_show img{
+	width: 184px;
+    margin-left: 60px;
+}
+.member p,
+.little p{
+	font-size: 18px;
+	text-indent: 0;
+    color: black;
+    margin-left: 20px;
+}
+.member p.bed{
+    font-size: 25px;
+    text-align: center;
+
+}
+.photo{
+	width: 100%;
+	height: 686px;
+	margin-top: 100px;
+}
+.photo img{
+	margin: 20px 0 0 8px;
+	width:260px;
+}
+
+.background_right{
+	height: 1138px;
+	width: 734px;
+	float: right;
+	margin: 64px 50px 0 0;
+}
+.background_right h3{
+	border: 0;
+	text-align: left;
+}
+.background_right .image{
+    float: right;
+    opacity: 0.5;
+}
+.background_right div{
+    font-size: 20px;
+}
+.background_right .image1{
+    float: right;
+    opacity: 0.5;
+    margin-top: 90px;
+}
+.member1{
+	width: 100%;
+	height: 434px;
+}
+.show{
+    height: 1138px;
+    width: 700px;
+    float: left;
+    margin: 64px 50px 0 0;
+}
+.description{
+    height: 100%;
+    width: 400px;
+    float: right;
+    margin-right: 30px;
+    margin-top: 120px;
+}
+.life{
+    width: 100%;
+    height: 1250px;
+    margin-top: 100px;
+}
+.life img{
+    opacity: 0.6;
+}
+.works{
+	width: 100%;
+	height: 474px;
+}
+.works img{
+	margin: 0 26px 14px 0;
+}
+.works img:nth-child(2n-1){
+	margin-right: 0;
+}
+.specialty li:last-child{
+	margin-right: 0;
+}
+.specialty li p{
+	text-indent: 0;
+	text-align: center;
+	line-height: 50px;
+}
+
+.bottom{
+	width: 1198px;
+	line-height: 52px;
+	background-color: black;
+	opacity: 0.7;
+    margin-left: 160px;
+	float: left;
+}
+.background h4{
+	font-weight: 500;
+	line-height: 56px;
+	font-size: 27px;
+	text-align: center;
+	color: #343434;
+	border-bottom: 1px solid #000;
+    margin-bottom: 15px;
+}
+.background_right ul li{
+	height: 520px;
+	width: 350px;
+	float: left;
+	margin-right: 15px;
+}
+.background_right ul li img{
+	height: 250px;
+	width: 360px;
+	float: left;
+}
+.background_right p{
+	line-height: 28px;
+	font-size: 14px;
+	float: left;
+	text-indent: 0;
+}
