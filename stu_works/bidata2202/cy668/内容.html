@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link type="text/css" href="css/css.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            $(document).on( 'scroll', function(){
+                var h = $(window).scrollTop();
+                var maxh = $(document).height();
+                var currh = $(window).height();
+                var num = Math.ceil((h-100)/160);
+                var str = ".peo_box"+num;
+                if(h>100 && h<(maxh-currh-1)){
+                    $(str).addClass('lishow');
+                }else if(h>=(maxh-currh-1)){
+                    $('.peo_box').addClass('lishow');
+                }else{
+                    $('.peo_box').removeClass('lishow');
+                }
+
+
+            });
+
+        });
+
+    </script>
+    <style>
+        a:link{
+            text-decoration: none;
+            color:pink;
+        }
+        a:visited{
+            color:pink;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top"></div>
+    <div class="bottom">
+        <div class="title"><a href="html/zhaopian.html" target="neirong">寝室成员介绍(下滑有惊喜)</a></div>
+        <div class="title">注:粉色为超链接</div>
+        <div>
+            <ul>
+                <li>
+                    <div class="peo_box1 peo_box">
+                        <img class="picture" src="pic/lcc.jpg" alt=>
+                        <div class="content">
+                            <h5 class="name"><a href="html/lcc.html" target="neirong">林聪聪</a></h5>
+                            <p class="p1">04 双鱼座 清纯男大 什么时候都很困 最喜欢睡觉</p>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="peo_box2 peo_box">
+                        <img class="picture" src="pic/wfh.jpg" alt="">
+                        <div class="content">
+                            <h5 class="name"><a href="html/wfh.html" target="neirong">吴法焕</a></h5>
+                            <p class="p2">趣多多 香脆曲奇 哥玩的就是斗兽棋 这太脆啦~</p>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="peo_box3 peo_box">
+                        <img class="picture" src="pic/1.jpg" alt="">
+                        <div class="content">
+                            <h5 class="name"><a href="html/xqc.html" target="neirong">XQC</a></h5>
+                            <p class="p3">哥的变态逍遥法外</p>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="peo_box4 peo_box">
+                        <img class="picture" src="pic/wzc.jpg" alt="">
+                        <div class="content">
+                            <h5 class="name"><a href="html/wzc.html" target="neirong">邬泽川</a></h5>
+                            <p class="p4">慢随天外云卷云舒</p>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="peo_box5 peo_box">
+                        <img class="picture" src="pic/zts.jpg" alt="">
+                        <div class="content">
+                            <h5 class="name"><a href="html/zts.html" target="neirong">张天烁</a></h5>
+                            <p class="p5">铁懒b，懒得写介绍</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="peo_box6 peo_box">
+                        <img class="picture" src="pic/wjj.jpg" alt="">
+                        <div class="content">
+                            <h5 class="name"><a href="html/wjj.html" target="neirong">王嘉嘉</a></h5>
+                            <p class="p6">重生之钟情浙江清纯女高中生</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

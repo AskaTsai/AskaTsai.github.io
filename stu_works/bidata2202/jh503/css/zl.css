@@ -1,0 +1,17 @@
+body{
+    background-color: antiquewhite;
+    text-align: center;
+}
+h2{
+    font-style:oblique;
+    font-family: serif;
+}
+img{
+    width: 150px;
+    height: 200px;
+    border-radius:20px;
+}
+hr{
+    background-color:rgb(241, 201, 148);
+    height: 3px ;
+}

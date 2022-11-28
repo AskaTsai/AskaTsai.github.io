@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Hello!!!</title>
+    <title>高级感满满的滚轮视差相应效果</title>
+    <link rel="stylesheet" href="../css/52.css">
+    <style>
+        #jieshao{
+
+            border-top:3px solid #4c6ed3;
+            align-items: center;
+            height: 1000px;
+            display:inline-block;
+            width:59%
+        }
+        #neirong{
+            border-top:3px solid #4c6ed3;
+            display:inline-block;
+            height: 1000px;
+            width:40%
+        }
+    </style>
+</head>
+
+<body>
+    <h2>向下滑动</h2>
+    <div class="bg">
+        <span>Hello</span>
+    </div>
+    <h1>朝阳668<br>寝室介绍</h1>
+
+    <script type="text/javascript">
+        // 获取背景对象
+        const bg=document.querySelector(".bg");
+        // 监听滚轮事件
+        document.addEventListener("scroll",function(){
+            // 获取当前滚轮的位置
+            const scrollY=window.scrollY;
+            if(scrollY!=0){
+                // 滚轮位置不等于0时,修改背景的定位加上滚轮的值
+                bg.style.backgroundPosition="calc(50% + "+scrollY+"px) calc(50% + "+scrollY+"px)";
+            }else{
+                // 否则清空背景的定位
+                bg.style.backgroundPosition="";
+            }
+        })
+    </script>
+    <div id="jieshao">
+        <iframe src="../内容.html" width=100% height=100%> </iframe>
+    </div>
+    <div id="neirong">
+        <iframe name="neirong" src="../html/zhaopian.html" width=100% height=100%> </iframe>
+    </div>
+</body>
+
+</html>

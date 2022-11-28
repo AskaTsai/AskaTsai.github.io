@@ -1,0 +1,21 @@
+h1{
+    text-align: center;
+    background-color: brown;
+    color: white;
+}
+main{
+    background-color: bisque;
+}
+footer{
+    background-color: burlywood;
+}
+img{
+    width: 25%;
+    height: 25%;
+}
+body{
+    text-align: center;
+}
+.fast{
+    text-align: center;
+}

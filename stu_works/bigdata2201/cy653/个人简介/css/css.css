@@ -1,0 +1,27 @@
+*{margin: 0;padding: 0;list-style: none}
+body{font-family: "微软雅黑";font-size: 16px;}
+a{text-decoration: none;}
+.box{width: 1080px;margin: 0 auto;border: 20px solid;border-radius:20px }
+.header{overflow: hidden}
+.nav{overflow: hidden;margin-top:30px;}
+.nav li{float:left;}
+.nav li a{display: block;width: 360px;height: 90px;line-height: 90px;text-align: center;color: #fff;
+font-size: 36px;font-weight: bold;background: #ffa940}
+
+.top{background: url("../image/奋斗.jpeg");height: 525px;text-align: center;}
+.wenhua img{width: 316px;margin: 15px;float: left;height: 230px;border-radius: 20px;}
+.con{overflow: hidden;color: #333;background: #ffffff;padding: 20px}
+.conbox{width: 1040px;padding: 20px 0;}
+.conbox>p{text-indent: 2em; line-height: 36px;margin-bottom: 24px;}
+.tel{height:76px;margin: 30px 0;padding-left: 90px;line-height: 70px;text-align: center;
+    color: #333; }
+.xinxi{foverflow: hidden;}
+.xinxi ul{width: 200px; float: left;background: rgba(168, 207,56, 0.4);border-radius: 20px;padding: 40px;
+    height: 235px; }
+.xinxi li{font-size: 16px;line-height: 40px;}
+.xinxi li h2{padding: 0px 0 30px; }
+.you{float: right;width: 740px;border-radius: 20px;height: 316px;}
+.ptxt{background: rgba(168,207,56,0.4);border-radius: 20px;padding: 40px;overflow: hidden;margin: 30px 0 0;}
+.ptxt p{line-height: 30px;margin-bottom: 24px;color: orange;width: 320px;float: left}
+.zuo{float: left;width: 250px;border-radius: 20px;margin-right: 30px}
+.footer{background: aqua;height: 90px;text-align: center;color: #333333;font-size: 14px;}

@@ -1,0 +1,29 @@
+section>p {
+    font-size: 18px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+body{
+    background-image:url("../pictrue/3.jpeg");
+    background-size: 100%;
+    padding: 20px;
+}
+
+#contact{
+    margin-bottom: 5px;
+}
+h1,h2{
+    text-align:center;
+    font-family:Impact,fantasy,"Arial Black";
+}
+
+footer>p{
+    font-size:20px;
+    font-family: Impact;
+}
+h1+article {
+    align-items: center;
+}
+p {
+    text-align: center;
+}

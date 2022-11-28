@@ -1,0 +1,91 @@
+.logo{
+    width: 100%;
+    text-align: center;
+    margin: 20px 0;
+}
+.logo h1{
+    cursor: pointer;
+    font-size: 35px;
+    letter-spacing: 2px;
+    margin: 20px 0 5px 0;
+}
+.logo p{
+    font-size: 20px;
+}
+.logo h1:hover{
+    color: #ce8460 !important;
+}
+
+
+.nav{
+    height: 40px;
+    background: #eee;
+    /*给导航加一个阴影*/
+    box-shadow: 0px 1px 2px #666;
+}
+*{
+    margin: 0;
+    padding: 0;
+    /*去掉内边框*/
+    text-decoration: none;
+    list-style: none;
+    /*去掉不必要的样式*/
+}
+.libt{
+    /*让列表横着排*/
+    float: left;
+    /*设置他的宽高*/
+    width: 25%;
+    height: 40px;
+    /*让它里面的字水平垂直居中*/
+    text-align: center;
+    line-height: 40px;
+}
+/*设置超链接样式*/
+.libt a{
+    color: #000;
+    /*把超链接改成块显示*/
+    display: block;
+}
+/*设置鼠标悬停色为灰色*/
+.libt a:hover{
+    background: #ccc;
+}
+.droplist{
+    /*背景色，阴影*/
+    background: #eee;
+    box-shadow: 0px 1px 2px #666;
+    /*隐藏二级导航*/
+    display: none;
+}
+.libt:hover .droplist{
+    display: block;
+}
+.droplist li{
+    /*用上边框把每项分隔开*/
+    border-top: 3px solid #ccc;
+    background: white;
+    z-index: 1;
+    position: relative;
+}
+.photo{
+    width: 1220px;
+    margin: 20px auto;
+}
+.p h2{
+    cursor: pointer;
+    font-size: 35px;
+    letter-spacing: 2px;
+    margin: 20px 0 5px 0;
+    text-align: center;
+}
+.p p{
+    text-align: center;
+    color: black;
+    font-size: 20px;
+}
+body{
+    background-image: url("./图片/合照1.jpg");
+    background-size: 100%;
+}
+

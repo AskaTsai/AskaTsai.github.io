@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN  ">
+  <head>
+    <meta charset="utf-8" />
+    <title>可搜</title>
+    <link rel="shortcut icon" href="./meimg/me.png" type="image/x-icon">
+    <link rel="icon" href="./meimg/me.png" type="image/x-icon">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link href="./style/me.css" type="text/css" rel="stylesheet" />
+  </head>
+  <main>
+    <body background="./meimg/background.jpg">
+      <section>
+        
+        <iframe width="300" height="30" frameborder="0" scrolling="no" hspace="0" src="https://i.tianqi.com/?c=code&a=getcode&id=34&icon=1"></iframe>
+        <div><h1>Welcome to my website !</h1></div>
+        <div><img src="./meimg/me.png" width="100px" class="me" /></div>
+      </section>
+
+      <section>
+        <div id="so">
+          <form
+            class="search_form"
+            action="https://cn.bing.com/search"
+            target="_blank"
+          >
+            <p style="text-align: center">
+              <input
+                type="text"
+                name="q"
+                class="input_text"
+                placeholder="请输入搜索内容"
+              /><!-- -->
+              <input type="submit" value="搜索" class="input_sub" />
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <footer>
+        
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+        <script src="https://myhkw.cn/player/js/player.js"id="myhk"key="demo"m="1"></script>
+        <div class="hitokoto" style="text-align: center; color: black ">
+          <script type="text/javascript">
+            $.get("https://v1.hitokoto.cn/", function (data, status) {
+              if (status == "success") {
+                $(".hitokoto").text(data.hitokoto +"  "+ "By:" + data.from);
+              } else {
+                $(".hitokoto").text("获取出错！");
+              }
+            });
+          </script>
+        </div>
+        <p style="text-align: center"><a href="./readme/readme.html" target="_blank">开发文档</a></p>
+        <p style="text-align: center">copyright &copy; <a href="http://weibo.com/renyuke">RenYuke</a></p>
+        <br>
+      </footer>
+    </body>
+  </main>
+</html>
+
+
