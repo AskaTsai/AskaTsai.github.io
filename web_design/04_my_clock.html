@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>我的时钟</title>
+  <link href="../css/clock.css" rel="stylesheet">
+</head>
+<body>
+<!-- 外部白色表盘 -->
+<main>
+  <!--内部黑色表盘-->
+  <div id="clock">
+    <!--  数字   -->
+    <div class="num">12</div>
+    <div class="num">3</div>
+    <div class="num">6</div>
+    <div class="num">9</div>
+    <!--  刻度尝试 批量赋值改用js渲染   -->
+    <!--  <div class="scale"></div>-->
+
+    <!--  定义指针 -->
+    <div id="centerCircle"></div>
+    <div id="hour"></div>
+    <div id="minute"></div>
+    <div id="second"></div>
+  </div>
+</main>
+
+
+
+
+
+
+<!--todo 后续改用引入js文件-->
+<script>
+    <!-- 和var的区别 获取黑色表盘对象-->
+    let oClock = document.querySelector("#clock");
+    let oScale;
+    for (let i = 1; i < 9; i++) {
+        oScale = document.createElement('div');
+        oScale.className = 'scale';
+        let degNum = 0
+        if (i < 3) {
+            degNum = 30 * i;
+        } else if (i < 5) {
+            degNum = 30 * (i + 1);
+        } else if (i < 7){
+            degNum = 30 * (i + 2);
+        } else {
+            degNum = 30 * (i + 3);
+        }
+        oScale.style.transform = 'rotate('+ degNum + 'deg)';
+
+        // 追加为子元素 放到黑色表盘里
+        oClock.appendChild(oScale);
+    }
+
+
+
+
+</script>
+
+<!--todo 后续改用引入js文件-->
+<script>
+    let oHour = document.querySelector("#hour")
+    let oMinute = document.querySelector("#minute")
+    let oSecond = document.querySelector("#second")
+
+    //定义函数
+    let run = ()=>{
+        //获取当前时间
+        let oDate = new Date();
+        let cH = oDate.getHours();
+        let cM = oDate.getMinutes();
+        let cS = oDate.getSeconds();
+        //看一下控制台效果
+        // console.log("当前时间为" + cH + "点" + cM + "分" + cS + "秒")
+
+        // 秒针效果
+        oSecond.style.transform = "rotate(" + cS*6 +"deg)"
+
+        // 分针效果
+        oMinute.style.transform = "rotate(" + cM*6 +"deg)"
+
+        // 小时效果，24小时，取余数，每一个刻度60小时
+        cH = (cH%12) + cM/60;
+        oHour.style.transform = "rotate(" + cH*30 +"deg)"
+
+
+    }
+    // todo 函数都是先定义，后执行函数
+    // 不可删除，不然初始化会有一秒延迟
+    run()
+    // 手动刷新不科学，搞一个定时器 ，1分针刷新一次
+    setInterval(run, 1000)
+</script>
+
+<!-- todo 引入照片 -->
+<script>
+    let oBody = document.querySelector("body")
+    let oMain = document.querySelector("main")
+    oMain.style.opacity = "0.5"
+
+    let index = 1;
+    let changePic = ()=>{
+        index = Math.floor(Math.random() * 7 + 1);
+        oBody.style.backgroundImage = "url(../img/web_design/clock/bg" + index+ ".jpg)";
+        oBody.style.backgroundSize = "cover";
+    }
+    //初始化先执行一次
+    changePic()
+    // 自动刷新
+    setInterval(changePic, 30*1000)
+
+
+    // 点击页面手动切换
+    oBody.onclick = () => {
+        changePic()
+    }
+</script>
+
+
+</body>
+</html>
