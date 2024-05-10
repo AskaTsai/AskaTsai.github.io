@@ -1,127 +1,130 @@
 <!DOCTYPE html>
+<!--online： https://askatsai.github.io/crawler_template/movie.html-->
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>电影票房信息</title>
-		<style>
-			table {
-			    width: 100%;
-			    border-collapse: collapse;
-			}
-			th, td {
-			    border: 1px solid black;
-			    padding: 8px;
-			    text-align: left;
-			}
-			.tip {
-                text-align: right;
-                font-size: 10px;
-                color: #bbb;
-                padding: 0 12px 7px 0;
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>电影票房信息</title>
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		th, td {
+			border: 1px solid black;
+			padding: 8px;
+			text-align: left;
+		}
+		.tip {
+			text-align: right;
+			font-size: 10px;
+			color: #bbb;
+			padding: 0 12px 7px 0;
+		}
+		.movieName {
+			color: #70a1ff
+		}
+	</style>
+</head>
+<body>
+<h1>当日电影票房信息</h1>
+<table>
+	<thead>
+	<tr>
+		<th>序号</th>
+		<th>片名</th>
+		<th>票房（万）</th>
+		<th>场次</th>
+		<th>人次</th>
+		<th>累计票房(万)</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<th>1</th>
+		<th class="movieName">九龙城寨之围城</th>
+		<th>1,406.78</th>
+		<th>57,301</th>
+		<th>343,096</th>
+		<th>40,782.36</th>
+	</tr>
+	<tr>
+		<th>2</th>
+		<th class="movieName">末路狂花钱</th>
+		<th>1,328.07</th>
+		<th>63,952</th>
+		<th>330,366</th>
+		<th>46,277.34</th>
+	</tr>
+	<tr>
+		<th>3</th>
+		<th class="movieName">维和防暴队</th>
+		<th>668.23</th>
+		<th>41,359</th>
+		<th>160,891</th>
+		<th>44,490.95</th>
 
-			}
-		</style>
-	</head>
-	<body>
-		<h1>当日电影票房信息</h1>
-		<table>
-			<thead>
-				<tr>
-					<th>序号</th>
-					<th>片名</th>
-					<th>票房（万）</th>
-					<th>场次</th>
-					<th>人次</th>
-					<th>累计票房(万)</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th>1</th>
-					<th>九龙城寨之围城</th>
-					<th>1,406.78</th>
-					<th>57,301</th>
-					<th>343,096</th>
-					<th>40,782.36</th>
-				</tr>
-				<tr>
-					<th>2</th>
-					<th>末路狂花钱</th>
-					<th>1,328.07</th>
-					<th>63,952</th>
-					<th>330,366</th>
-					<th>46,277.34</th>
-				</tr>
-				<tr>
-					<th>3</th>
-					<th>维和防暴队</th>
-					<th>668.23</th>
-					<th>41,359</th>
-					<th>160,891</th>
-					<th>44,490.95</th>
-
-				</tr>
+	</tr>
 
 
-				<tr>
-					<th>4</th>
-					<th>间谍过家家 代号：白</th>
-					<th>267.88</th>
-					<th>20,136</th>
-					<th>69,713</th>
-					<th>24,842.01</th>
-				</tr>
-				<tr>
-					<th>5</th>
-					<th>哈尔的移动城堡</th>
-					<th>221.29</th>
-					<th>14,953</th>
-					<th>56,146</th>
-					<th>13,288.57</th>
-				</tr>
-				<tr>
-					<th>6</th>
-					<th>猩球崛起：新世界</th>
-					<th>89.51</th>
-					<th>1,641</th>
-					<th>20,575</th>
-					<th>1,221.85</th>
-				</tr>
-				<tr>
-					<th>7</th>
-					<th>穿过月亮的旅行</th>
-					<th>75.54</th>
-					<th>6,806</th>
-					<th>19,197</th>
-					<th>4,147.87</th>
-				</tr>
-				<tr>
-					<th>8</th>
-					<th>我要当老师</th>
-					<th>57.93</th>
-					<th>183</th>
-					<th>15,294</th>
-					<th>455.69</th>
-				</tr>
-				<tr>
-					<th>9</th>
-					<th>哥斯拉大战金刚2：帝国崛起</th>
-					<th>44.09</th>
-					<th>3,696</th>
-					<th>10,300</th>
-					<th>94,901.92</th>
-				</tr>
-				<tr>
-					<th>10</th>
-					<th>你想活出怎样的人生</th>
-					<th>24.88</th>
-					<th>2,097</th>
-					<th>6,439</th>
-					<th>78,711.99</th>
-				</tr>
-			</tbody>
-		</table>
-        <p class="tip" style="margin-top: 12px;">*数据仅供教学使用，非实际票房数据</p>
-	</body>
+	<tr>
+		<th>4</th>
+		<th class="movieName">间谍过家家 代号：白</th>
+		<th>267.88</th>
+		<th>20,136</th>
+		<th>69,713</th>
+		<th>24,842.01</th>
+	</tr>
+	<tr>
+		<th>5</th>
+		<th class="movieName">哈尔的移动城堡</th>
+		<th>221.29</th>
+		<th>14,953</th>
+		<th>56,146</th>
+		<th>13,288.57</th>
+	</tr>
+	<tr>
+		<th>6</th>
+		<th class="movieName">猩球崛起：新世界</th>
+		<th>89.51</th>
+		<th>1,641</th>
+		<th>20,575</th>
+		<th>1,221.85</th>
+	</tr>
+	<tr>
+		<th>7</th>
+		<th class="movieName">穿过月亮的旅行</th>
+		<th>75.54</th>
+		<th>6,806</th>
+		<th>19,197</th>
+		<th>4,147.87</th>
+	</tr>
+	<tr>
+		<th>8</th>
+		<th class="movieName">我要当老师</th>
+		<th>57.93</th>
+		<th>183</th>
+		<th>15,294</th>
+		<th>455.69</th>
+	</tr>
+	<tr>
+		<th>9</th>
+		<th class="movieName">哥斯拉大战金刚2：帝国崛起</th>
+		<th>44.09</th>
+		<th>3,696</th>
+		<th>10,300</th>
+		<th>94,901.92</th>
+	</tr>
+	<tr>
+		<th>10</th>
+		<th class="movieName">你想活出怎样的人生</th>
+		<th>24.88</th>
+		<th>2,097</th>
+		<th>6,439</th>
+		<th>78,711.99</th>
+	</tr>
+	</tbody>
+</table>
+<p class="tip" style="margin-top: 12px;">*数据仅供教学使用，非实际票房数据</p>
+</body>
 </html>
