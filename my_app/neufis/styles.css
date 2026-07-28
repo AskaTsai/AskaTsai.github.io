@@ -19,11 +19,20 @@
   box-sizing: border-box;
 }
 
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 100%;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
+  -webkit-tap-highlight-color: transparent;
 }
 
 button,
@@ -92,9 +101,10 @@ label {
 
 .login-screen {
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
 }
 
 .login-card {
@@ -136,11 +146,15 @@ label {
 
 .app-shell {
   min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  min-width: 0;
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
 }
 
 .sidebar {
+  min-width: 0;
   border-right: 1px solid var(--line);
   background: #dfe8ef;
   padding: 18px;
@@ -175,6 +189,8 @@ label {
 }
 
 .module-nav {
+  min-width: 0;
+  max-width: 100%;
   display: grid;
   gap: 8px;
   overflow: auto;
@@ -223,8 +239,17 @@ label {
 }
 
 .content {
+  width: 100%;
   min-width: 0;
   padding: 24px;
+}
+
+.module-content,
+.module-section,
+.grid,
+.field {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .topbar,
@@ -243,6 +268,13 @@ label {
   justify-content: space-between;
   gap: 16px;
   padding: 18px 20px;
+}
+
+#lockBtn {
+  flex: 0 0 auto;
+  min-width: 62px;
+  padding-inline: 10px;
+  white-space: nowrap;
 }
 
 .topbar h2,
@@ -310,7 +342,11 @@ label {
 }
 
 .table-wrap {
+  width: 100%;
+  max-width: 100%;
   overflow: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--line);
   border-radius: 10px;
   margin-top: 14px;
@@ -422,10 +458,14 @@ tr:last-child td {
 
 @media (max-width: 900px) {
   .app-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   .sidebar {
+    width: 100%;
+    max-width: 100vw;
     position: static;
     height: auto;
     border-right: 0;
@@ -433,9 +473,13 @@ tr:last-child td {
   }
 
   .module-nav {
+    width: 100%;
+    min-width: 0;
     grid-auto-flow: column;
     grid-auto-columns: minmax(132px, max-content);
     overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
   }
 
@@ -446,16 +490,69 @@ tr:last-child td {
   .sidebar-actions {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  #installBtn:not(.hidden) {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 640px) {
+  button,
+  .file-button {
+    min-height: 44px;
+  }
+
+  input,
+  select,
+  textarea {
+    min-width: 0;
+    font-size: 16px;
+  }
+
   .content,
   .sidebar {
     padding: 14px;
   }
 
+  .sidebar {
+    gap: 12px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+
+  .content {
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    padding-left: max(14px, env(safe-area-inset-left));
+  }
+
+  .brand img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .module-nav {
+    grid-auto-columns: minmax(116px, max-content);
+    gap: 6px;
+  }
+
+  .nav-btn {
+    min-height: 40px;
+    padding-inline: 11px;
+  }
+
   .topbar {
     align-items: flex-start;
+  }
+
+  .topbar h2 {
+    font-size: 22px;
+  }
+
+  .topbar p {
+    font-size: 14px;
+    line-height: 1.45;
   }
 
   .command-row,
@@ -469,7 +566,35 @@ tr:last-child td {
   }
 
   .sidebar-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .sidebar-actions button,
+  .sidebar-actions .file-button {
+    min-width: 0;
+    padding-inline: 7px;
+    font-size: 13px;
+  }
+
+  .quick-tags {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 3px;
+  }
+
+  .quick-tags button {
+    flex: 0 0 auto;
+  }
+
+  .actions button {
+    flex: 1 1 120px;
+  }
+
+  table {
+    min-width: 620px;
   }
 
   .topbar,
@@ -478,5 +603,10 @@ tr:last-child td {
   .module-section {
     border-radius: 10px;
     padding: 14px;
+  }
+
+  .module-section h3,
+  .panel-heading h3 {
+    font-size: 18px;
   }
 }

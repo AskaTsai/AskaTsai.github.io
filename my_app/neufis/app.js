@@ -32,6 +32,7 @@ const drinkCalories = [
 
 let state = loadState();
 let activeModule = state.activeModule || "health";
+let deferredInstallPrompt = null;
 
 const els = {
   login: document.getElementById("login"),
@@ -40,6 +41,7 @@ const els = {
   loginBtn: document.getElementById("loginBtn"),
   loginError: document.getElementById("loginError"),
   lockBtn: document.getElementById("lockBtn"),
+  installBtn: document.getElementById("installBtn"),
   moduleNav: document.getElementById("moduleNav"),
   moduleTitle: document.getElementById("moduleTitle"),
   moduleSubtitle: document.getElementById("moduleSubtitle"),
@@ -57,6 +59,7 @@ init();
 
 function init() {
   bindGlobalEvents();
+  initInstallableApp();
   if (sessionStorage.getItem(UNLOCK_KEY) === "1") {
     unlock();
   }
@@ -86,6 +89,33 @@ function bindGlobalEvents() {
   });
   els.exportExcelBtn.addEventListener("click", exportExcel);
   els.importFile.addEventListener("change", importBackup);
+}
+
+function initInstallableApp() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    });
+  }
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    els.installBtn.classList.remove("hidden");
+  });
+
+  els.installBtn.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    els.installBtn.classList.add("hidden");
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    els.installBtn.classList.add("hidden");
+  });
 }
 
 function tryLogin() {

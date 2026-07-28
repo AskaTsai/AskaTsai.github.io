@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#5f7388" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="捏欧菲斯" />
     <title>捏欧菲斯</title>
     <link rel="icon" href="assets/pig-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -34,6 +40,7 @@
         </div>
         <nav id="moduleNav" class="module-nav" aria-label="模块导航"></nav>
         <div class="sidebar-actions">
+          <button id="installBtn" class="hidden">安装到手机</button>
           <button id="overviewBtn">工作台总览</button>
           <button id="exportExcelBtn">导出 Excel</button>
           <label class="file-button">
