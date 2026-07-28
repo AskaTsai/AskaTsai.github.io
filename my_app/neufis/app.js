@@ -41,6 +41,8 @@ const els = {
   loginBtn: document.getElementById("loginBtn"),
   loginError: document.getElementById("loginError"),
   lockBtn: document.getElementById("lockBtn"),
+  settingsBtn: document.getElementById("settingsBtn"),
+  settingsMenu: document.getElementById("settingsMenu"),
   installBtn: document.getElementById("installBtn"),
   moduleNav: document.getElementById("moduleNav"),
   moduleTitle: document.getElementById("moduleTitle"),
@@ -71,10 +73,21 @@ function bindGlobalEvents() {
     if (event.key === "Enter") tryLogin();
   });
   els.lockBtn.addEventListener("click", () => {
+    closeSettingsMenu();
     sessionStorage.removeItem(UNLOCK_KEY);
     els.login.classList.remove("hidden");
     els.app.classList.add("hidden");
     els.passcode.value = "";
+  });
+  els.settingsBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setSettingsMenu(!els.settingsMenu.classList.contains("open"));
+  });
+  document.addEventListener("click", (event) => {
+    if (!els.settingsMenu.contains(event.target) && event.target !== els.settingsBtn) closeSettingsMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeSettingsMenu();
   });
   els.quickSubmit.addEventListener("click", () => handleQuickInput(els.quickInput.value.trim()));
   els.quickInput.addEventListener("keydown", (event) => {
@@ -86,9 +99,26 @@ function bindGlobalEvents() {
   els.copyOutputBtn.addEventListener("click", copyOutput);
   els.overviewBtn.addEventListener("click", () => {
     setOutput(renderOverview());
+    closeSettingsMenu();
   });
-  els.exportExcelBtn.addEventListener("click", exportExcel);
-  els.importFile.addEventListener("change", importBackup);
+  els.exportExcelBtn.addEventListener("click", () => {
+    closeSettingsMenu();
+    exportExcel();
+  });
+  els.importFile.addEventListener("change", (event) => {
+    closeSettingsMenu();
+    importBackup(event);
+  });
+}
+
+function setSettingsMenu(open) {
+  els.settingsMenu.classList.toggle("open", open);
+  els.settingsBtn.setAttribute("aria-expanded", String(open));
+  els.settingsBtn.setAttribute("aria-label", open ? "关闭设置" : "打开设置");
+}
+
+function closeSettingsMenu() {
+  setSettingsMenu(false);
 }
 
 function initInstallableApp() {
@@ -106,6 +136,7 @@ function initInstallableApp() {
 
   els.installBtn.addEventListener("click", async () => {
     if (!deferredInstallPrompt) return;
+    closeSettingsMenu();
     deferredInstallPrompt.prompt();
     await deferredInstallPrompt.userChoice;
     deferredInstallPrompt = null;
