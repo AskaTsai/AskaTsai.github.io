@@ -1,4 +1,4 @@
-const CACHE_NAME = "neufis-app-v5";
+const CACHE_NAME = "neufis-app-v6";
 const APP_FILES = [
   "./",
   "./index.html",

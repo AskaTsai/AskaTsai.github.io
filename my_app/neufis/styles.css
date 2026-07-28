@@ -134,6 +134,31 @@ textarea {
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
+input[type="date"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+input[type="date"]::-webkit-date-and-time-value,
+input[type="date"]::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+}
+
+@supports (-webkit-touch-callout: none) {
+  input[type="date"] {
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -449,6 +474,7 @@ label {
 
 .field {
   grid-column: span 4;
+  min-inline-size: 0;
 }
 
 .field.wide {

@@ -151,6 +151,7 @@
 - 640px 及以下表单改为单列，按钮触控高度不低于 44px，输入字号不低于 16px。
 - 640px 及以下将工作台总览、Excel 导入/导出和安装入口收进设置图标菜单。
 - 在 360px 和 393px 宽度下，`body.scrollWidth` 不得大于视口宽度。
+- iOS Safari 的原生日期控件必须保持 `min-inline-size: 0` 和 `max-inline-size: 100%`，不得撑出字段容器。
 - 宽表格必须在 `.table-wrap` 内横向滑动，不能撑宽整个页面。
 - 导航、快捷指令可以局部横向滑动，但不得遮挡后续内容。
 - 文本不得溢出按钮或与相邻控件重叠。
@@ -158,7 +159,8 @@
 
 ## 9. PWA 约束
 
-- PWA 路径一律使用相对路径，确保可部署在 `/my_app/neufis/` 子目录。
+- 项目、部署和交付描述一律以 `neufis/` 为根目录，不得添加额外的上级目录。
+- PWA 资源一律使用相对路径，确保从 `neufis/` 根目录直接部署。
 - 安装和 Service Worker 离线能力要求 HTTPS；局域网 HTTP 地址只用于测试。
 - 修改 `index.html`、`styles.css`、`app.js`、清单或图标后，必须更新 `service-worker.js` 的 `CACHE_NAME`。
 - 新增离线必需资源时，同步加入 `APP_FILES`。
