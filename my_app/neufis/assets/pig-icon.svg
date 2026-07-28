@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">捏欧菲斯小猪图标</title>
+  <desc id="desc">灰蓝色工作台中的柔和小猪头像图标</desc>
+  <defs>
+    <linearGradient id="bg" x1="22" y1="12" x2="106" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#dce7ef"/>
+      <stop offset="1" stop-color="#8499aa"/>
+    </linearGradient>
+    <linearGradient id="face" x1="31" y1="27" x2="94" y2="103" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffd6dc"/>
+      <stop offset="1" stop-color="#f1aeba"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bg)"/>
+  <path d="M37 41c-8-14-18-13-20-4-2 8 3 18 14 20 1-6 3-11 6-16Z" fill="#f2b2bd"/>
+  <path d="M91 41c8-14 18-13 20-4 2 8-3 18-14 20-1-6-3-11-6-16Z" fill="#f2b2bd"/>
+  <ellipse cx="64" cy="66" rx="39" ry="35" fill="url(#face)"/>
+  <ellipse cx="64" cy="76" rx="21" ry="15" fill="#e894a4"/>
+  <circle cx="55" cy="75" r="3.8" fill="#6f4b58"/>
+  <circle cx="73" cy="75" r="3.8" fill="#6f4b58"/>
+  <circle cx="49" cy="59" r="5" fill="#334a5e"/>
+  <circle cx="79" cy="59" r="5" fill="#334a5e"/>
+  <circle cx="51" cy="57" r="1.5" fill="#ffffff"/>
+  <circle cx="81" cy="57" r="1.5" fill="#ffffff"/>
+  <path d="M47 91c9 7 25 7 34 0" fill="none" stroke="#7a5360" stroke-width="4" stroke-linecap="round"/>
+  <path d="M28 31c4 0 7 3 8 7" fill="none" stroke="#cf8796" stroke-width="4" stroke-linecap="round"/>
+  <path d="M100 31c-4 0-7 3-8 7" fill="none" stroke="#cf8796" stroke-width="4" stroke-linecap="round"/>
+</svg>

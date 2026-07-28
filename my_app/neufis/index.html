@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#5f7388" />
+    <title>捏欧菲斯</title>
+    <link rel="icon" href="assets/pig-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="login" class="login-screen">
+      <section class="login-card">
+        <img src="assets/pig-icon.svg" alt="捏欧菲斯图标" class="login-logo" />
+        <h1>捏欧菲斯</h1>
+        <p>私人综合工作台</p>
+        <label for="passcode">动态验证码</label>
+        <div class="login-row">
+          <input id="passcode" inputmode="numeric" autocomplete="one-time-code" placeholder="请输入验证码" />
+          <button id="loginBtn">进入</button>
+        </div>
+        <p id="loginError" class="error-text" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <main id="app" class="app-shell hidden">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="assets/pig-icon.svg" alt="" />
+          <div>
+            <strong>捏欧菲斯</strong>
+            <span>私人工作台</span>
+          </div>
+        </div>
+        <nav id="moduleNav" class="module-nav" aria-label="模块导航"></nav>
+        <div class="sidebar-actions">
+          <button id="overviewBtn">工作台总览</button>
+          <button id="exportExcelBtn">导出 Excel</button>
+          <label class="file-button">
+            导入备份
+            <input id="importFile" type="file" accept=".xls,.html,.json,.txt" />
+          </label>
+        </div>
+      </aside>
+
+      <section class="content">
+        <header class="topbar">
+          <div>
+            <h2 id="moduleTitle">工作台总览</h2>
+            <p id="moduleSubtitle">记录长期留存，可编辑、删除、导出、复盘。</p>
+          </div>
+          <button id="lockBtn" title="退出登录">锁定</button>
+        </header>
+
+        <section class="command-panel">
+          <label for="quickInput">动态指令 / 随手记录</label>
+          <div class="command-row">
+            <textarea id="quickInput" rows="3" placeholder="例如：70.5 / 支出 26 餐饮 午饭 / 健康周报 / 新增读书模块"></textarea>
+            <button id="quickSubmit">执行</button>
+          </div>
+          <div class="quick-tags">
+            <button data-command="健康周报">健康周报</button>
+            <button data-command="健康月报">健康月报</button>
+            <button data-command="月度账单">月度账单</button>
+            <button data-command="仅未完成事项">仅未完成事项</button>
+            <button data-command="导出全部记录">导出全部记录</button>
+            <button data-command="清空本条记录">清空本条记录</button>
+          </div>
+        </section>
+
+        <section id="moduleContent" class="module-content"></section>
+        <section class="output-panel">
+          <div class="panel-heading">
+            <h3>输出</h3>
+            <button id="copyOutputBtn">复制</button>
+          </div>
+          <pre id="outputBox">等待记录或指令。</pre>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
