@@ -1,8 +1,9 @@
-const CACHE_NAME = "neufis-app-v6";
+const CACHE_NAME = "neufis-app-v8";
 const APP_FILES = [
   "./",
   "./index.html",
   "./styles.css",
+  "./ai.js",
   "./app.js",
   "./manifest.webmanifest",
   "./assets/pig-icon.svg",

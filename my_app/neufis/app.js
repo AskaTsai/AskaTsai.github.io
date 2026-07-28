@@ -1,5 +1,6 @@
 const STORE_KEY = "neufis-workbench-v1";
-const UNLOCK_KEY = "neufis-unlocked";
+const TRUSTED_DEVICE_KEY = "neufis-unlocked";
+const AI_CONSENT_KEY = "neufis-ai-privacy-consent-v1";
 
 const baseModules = [
   { id: "health", name: "健康管理", enabled: true, rules: "体重、排便、运动、饮品热量、健康周报/月报。" },
@@ -33,6 +34,9 @@ const drinkCalories = [
 let state = loadState();
 let activeModule = state.activeModule || "health";
 let deferredInstallPrompt = null;
+let pendingCandidate = null;
+let pendingAIRequest = null;
+let privacyResolver = null;
 
 const els = {
   login: document.getElementById("login"),
@@ -43,6 +47,7 @@ const els = {
   lockBtn: document.getElementById("lockBtn"),
   settingsBtn: document.getElementById("settingsBtn"),
   settingsMenu: document.getElementById("settingsMenu"),
+  aiSettingsBtn: document.getElementById("aiSettingsBtn"),
   installBtn: document.getElementById("installBtn"),
   moduleNav: document.getElementById("moduleNav"),
   moduleTitle: document.getElementById("moduleTitle"),
@@ -54,7 +59,28 @@ const els = {
   copyOutputBtn: document.getElementById("copyOutputBtn"),
   overviewBtn: document.getElementById("overviewBtn"),
   exportExcelBtn: document.getElementById("exportExcelBtn"),
-  importFile: document.getElementById("importFile")
+  importFile: document.getElementById("importFile"),
+  aiSettingsDialog: document.getElementById("aiSettingsDialog"),
+  aiSettingsForm: document.getElementById("aiSettingsForm"),
+  aiProvider: document.getElementById("aiProvider"),
+  aiApiKey: document.getElementById("aiApiKey"),
+  aiKeyHint: document.getElementById("aiKeyHint"),
+  aiBaseUrl: document.getElementById("aiBaseUrl"),
+  aiModel: document.getElementById("aiModel"),
+  aiCustomFields: document.getElementById("aiCustomFields"),
+  aiConnectionStatus: document.getElementById("aiConnectionStatus"),
+  clearAIKeyBtn: document.getElementById("clearAIKeyBtn"),
+  saveTestAIBtn: document.getElementById("saveTestAIBtn"),
+  aiPreviewDialog: document.getElementById("aiPreviewDialog"),
+  aiPreviewForm: document.getElementById("aiPreviewForm"),
+  aiPreviewTitle: document.getElementById("aiPreviewTitle"),
+  aiPreviewSubtitle: document.getElementById("aiPreviewSubtitle"),
+  aiPreviewFields: document.getElementById("aiPreviewFields"),
+  aiPreviewError: document.getElementById("aiPreviewError"),
+  retryAIBtn: document.getElementById("retryAIBtn"),
+  aiPrivacyDialog: document.getElementById("aiPrivacyDialog"),
+  cancelAIPrivacyBtn: document.getElementById("cancelAIPrivacyBtn"),
+  confirmAIPrivacyBtn: document.getElementById("confirmAIPrivacyBtn")
 };
 
 init();
@@ -62,7 +88,9 @@ init();
 function init() {
   bindGlobalEvents();
   initInstallableApp();
-  if (sessionStorage.getItem(UNLOCK_KEY) === "1") {
+  if (localStorage.getItem(TRUSTED_DEVICE_KEY) === "1" || sessionStorage.getItem(TRUSTED_DEVICE_KEY) === "1") {
+    localStorage.setItem(TRUSTED_DEVICE_KEY, "1");
+    sessionStorage.removeItem(TRUSTED_DEVICE_KEY);
     unlock();
   }
 }
@@ -74,7 +102,8 @@ function bindGlobalEvents() {
   });
   els.lockBtn.addEventListener("click", () => {
     closeSettingsMenu();
-    sessionStorage.removeItem(UNLOCK_KEY);
+    localStorage.removeItem(TRUSTED_DEVICE_KEY);
+    sessionStorage.removeItem(TRUSTED_DEVICE_KEY);
     els.login.classList.remove("hidden");
     els.app.classList.add("hidden");
     els.passcode.value = "";
@@ -109,6 +138,23 @@ function bindGlobalEvents() {
     closeSettingsMenu();
     importBackup(event);
   });
+  els.aiSettingsBtn.addEventListener("click", openAISettings);
+  els.aiProvider.addEventListener("change", () => {
+    window.NeufisAI.setActiveProvider(els.aiProvider.value);
+    renderAISettings();
+  });
+  els.aiSettingsForm.addEventListener("submit", saveAndTestAI);
+  els.clearAIKeyBtn.addEventListener("click", clearCurrentAIKey);
+  document.querySelectorAll(".dialog-close").forEach((button) => button.addEventListener("click", () => els.aiSettingsDialog.close()));
+  document.querySelectorAll(".preview-cancel").forEach((button) => button.addEventListener("click", closeCandidatePreview));
+  els.aiPreviewForm.addEventListener("submit", confirmCandidate);
+  els.retryAIBtn.addEventListener("click", retryAIRecognition);
+  els.cancelAIPrivacyBtn.addEventListener("click", () => resolvePrivacy(false));
+  els.confirmAIPrivacyBtn.addEventListener("click", () => resolvePrivacy(true));
+  els.aiPrivacyDialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    resolvePrivacy(false);
+  });
 }
 
 function setSettingsMenu(open) {
@@ -119,6 +165,146 @@ function setSettingsMenu(open) {
 
 function closeSettingsMenu() {
   setSettingsMenu(false);
+}
+
+function openAISettings() {
+  closeSettingsMenu();
+  els.aiProvider.value = window.NeufisAI.getConfig().activeProvider;
+  renderAISettings();
+  els.aiSettingsDialog.showModal();
+}
+
+function renderAISettings() {
+  const config = window.NeufisAI.getConfig();
+  const provider = els.aiProvider.value || config.activeProvider;
+  els.aiProvider.value = provider;
+  const saved = config.providers[provider];
+  els.aiApiKey.value = "";
+  els.aiApiKey.placeholder = saved.hasKey ? "留空表示不修改" : "填写新的 API Key";
+  els.aiKeyHint.textContent = saved.hasKey ? `已保存：${saved.keyMask}` : "尚未保存";
+  els.aiCustomFields.classList.toggle("hidden", provider !== "custom");
+  els.aiBaseUrl.value = provider === "custom" ? saved.baseUrl : "";
+  els.aiModel.value = provider === "custom" ? saved.model : "";
+  const verified = saved.verifiedAt ? new Date(saved.verifiedAt).toLocaleString() : "";
+  els.aiConnectionStatus.textContent = verified ? `已验证 · ${verified}` : "尚未验证";
+  els.aiConnectionStatus.className = `status-pill${verified ? " good" : ""}`;
+}
+
+async function saveAndTestAI(event) {
+  event.preventDefault();
+  const provider = els.aiProvider.value;
+  setButtonBusy(els.saveTestAIBtn, true, "正在测试");
+  els.aiConnectionStatus.textContent = "正在连接...";
+  els.aiConnectionStatus.className = "status-pill warn";
+  try {
+    await window.NeufisAI.saveAndTest({
+      provider,
+      apiKey: els.aiApiKey.value,
+      baseUrl: els.aiBaseUrl.value,
+      model: els.aiModel.value
+    });
+    renderAISettings();
+    els.aiConnectionStatus.textContent = "连接成功，已启用";
+    els.aiConnectionStatus.className = "status-pill good";
+  } catch (error) {
+    els.aiConnectionStatus.textContent = error.message;
+    els.aiConnectionStatus.className = "status-pill warn";
+  } finally {
+    setButtonBusy(els.saveTestAIBtn, false);
+  }
+}
+
+function clearCurrentAIKey() {
+  const provider = els.aiProvider.value;
+  if (!confirm("确认清除当前厂商的 API Key？")) return;
+  window.NeufisAI.clearProvider(provider);
+  renderAISettings();
+}
+
+function setButtonBusy(button, busy, label = "处理中") {
+  if (!button) return;
+  if (busy) {
+    button.dataset.label = button.textContent;
+    button.textContent = label;
+    button.disabled = true;
+    return;
+  }
+  button.disabled = false;
+  if (button.dataset.label) button.textContent = button.dataset.label;
+  delete button.dataset.label;
+}
+
+function aiIsReady() {
+  const config = window.NeufisAI.getConfig();
+  return Boolean(config.providers[config.activeProvider]?.verifiedAt);
+}
+
+function ensureAIConsent() {
+  if (localStorage.getItem(AI_CONSENT_KEY) === "1") return Promise.resolve(true);
+  if (privacyResolver) return Promise.resolve(false);
+  els.aiPrivacyDialog.showModal();
+  return new Promise((resolve) => {
+    privacyResolver = resolve;
+  });
+}
+
+function resolvePrivacy(accepted) {
+  if (accepted) localStorage.setItem(AI_CONSENT_KEY, "1");
+  if (els.aiPrivacyDialog.open) els.aiPrivacyDialog.close();
+  const resolve = privacyResolver;
+  privacyResolver = null;
+  if (resolve) resolve(accepted);
+}
+
+async function runAI(request) {
+  if (!aiIsReady()) throw new Error("AI 尚未配置。请在设置中填写 API Key 并完成连接测试。");
+  if (!(await ensureAIConsent())) throw new Error("已取消 AI 请求。");
+  return window.NeufisAI.runTask(request);
+}
+
+async function requestCandidate(request, button = els.quickSubmit) {
+  setButtonBusy(button, true, "AI 识别中");
+  try {
+    const result = await request();
+    showCandidatePreview(result, request);
+  } catch (error) {
+    setOutput(`AI 处理失败：${error.message}\n\n本地记录、报表和 Excel 功能仍可正常使用。`);
+  } finally {
+    setButtonBusy(button, false);
+  }
+}
+
+function resizeImageFile(file) {
+  if (!file || !file.type.startsWith("image/")) return Promise.reject(new Error("请选择有效的图片文件。"));
+  if (file.size > 15 * 1024 * 1024) return Promise.reject(new Error("图片不能超过 15 MB。"));
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      try {
+        const scale = Math.min(1, 1600 / Math.max(image.naturalWidth, image.naturalHeight));
+        const width = Math.max(1, Math.round(image.naturalWidth * scale));
+        const height = Math.max(1, Math.round(image.naturalHeight * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext("2d", { alpha: false });
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      } catch {
+        reject(new Error("图片处理失败，请更换 JPG 或 PNG 图片。"));
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("无法读取图片，请更换 JPG 或 PNG 图片。"));
+    };
+    image.src = url;
+  });
 }
 
 function initInstallableApp() {
@@ -151,7 +337,7 @@ function initInstallableApp() {
 
 function tryLogin() {
   if (els.passcode.value.trim() === expectedCode()) {
-    sessionStorage.setItem(UNLOCK_KEY, "1");
+    localStorage.setItem(TRUSTED_DEVICE_KEY, "1");
     unlock();
     return;
   }
@@ -293,6 +479,246 @@ function markdownTable(headers, rows) {
   return [head, line, ...body].join("\n");
 }
 
+function candidateFields(moduleId) {
+  const definitions = {
+    health: [
+      ["date", "日期", "date"],
+      ["heightCm", "身高 cm", "number"],
+      ["weight", "体重 kg", "number"],
+      ["bowel", "排便", "select", ["", "是", "否"]],
+      ["exerciseDone", "运动", "select", ["", "是", "否"]],
+      ["exerciseType", "运动类型", "text"],
+      ["drinkText", "饮品信息", "text", [], "full"],
+      ["calories", "估算热量 kcal", "number"]
+    ],
+    travel: [
+      ["startDate", "开始时间", "date"],
+      ["endDate", "结束时间", "date"],
+      ["destination", "目的地", "text"],
+      ["companions", "同行人", "text"],
+      ["lodging", "住宿信息", "text", [], "wide"],
+      ["transport", "交通", "text"],
+      ["itineraryText", "逐日行程", "textarea", [], "full"],
+      ["route", "路线描述", "textarea", [], "full"],
+      ["packing", "物品清单", "textarea", [], "full"],
+      ["notes", "备注", "textarea", [], "full"]
+    ],
+    wallet: [
+      ["date", "日期", "date"],
+      ["kind", "类型", "select", ["expense", "income"]],
+      ["amount", "金额", "number"],
+      ["category", "类别", "select", categoryOptions],
+      ["note", "备注", "text", [], "wide"]
+    ],
+    quotes: [
+      ["date", "日期", "date"],
+      ["quote", "语录", "textarea", [], "full"],
+      ["context", "场景", "textarea", [], "full"]
+    ],
+    todos: [
+      ["category", "分类", "select", ["工作待办", "生活待办"]],
+      ["due", "截止时间", "date"],
+      ["content", "事项内容", "textarea", [], "full"]
+    ],
+    stocks: [
+      ["date", "日期", "date"],
+      ["symbol", "股票/指数", "text"],
+      ["title", "标题", "text", [], "wide"],
+      ["source", "来源", "text"],
+      ["summary", "摘要/观点", "textarea", [], "full"]
+    ],
+    generic: [
+      ["date", "日期", "date"],
+      ["title", "标题", "text", [], "wide"],
+      ["content", "内容", "textarea", [], "full"]
+    ]
+  };
+  return definitions[moduleId] || definitions.generic;
+}
+
+function showCandidatePreview({ module, data, title, subtitle }, retryRequest) {
+  const mod = getModule(module);
+  if (!mod || !mod.enabled) throw new Error("AI 返回了未启用的模块，未生成记录。");
+  pendingCandidate = { module, data: normalizeCandidate(module, data) };
+  pendingAIRequest = retryRequest || null;
+  els.aiPreviewTitle.textContent = title || `确认 ${mod.name} 识别结果`;
+  els.aiPreviewSubtitle.textContent = subtitle || "内容由 AI 提取，可编辑；确认前不会写入工作台。";
+  els.aiPreviewError.textContent = "";
+  els.retryAIBtn.classList.toggle("hidden", !pendingAIRequest);
+  els.aiPreviewFields.replaceChildren();
+  candidateFields(module).forEach(([name, label, type, options = [], width = ""]) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = `field ${width}`.trim();
+    const labelNode = document.createElement("label");
+    labelNode.htmlFor = `candidate-${name}`;
+    labelNode.textContent = label;
+    let control;
+    if (type === "textarea") {
+      control = document.createElement("textarea");
+      control.rows = 3;
+    } else if (type === "select") {
+      control = document.createElement("select");
+      options.forEach((option) => {
+        const optionNode = document.createElement("option");
+        optionNode.value = option;
+        optionNode.textContent = option || "未记录";
+        control.append(optionNode);
+      });
+    } else {
+      control = document.createElement("input");
+      control.type = type;
+      if (type === "number") control.step = "any";
+    }
+    control.id = `candidate-${name}`;
+    control.name = name;
+    const value = pendingCandidate.data[name];
+    control.value = Array.isArray(value) ? value.join("\n") : value ?? "";
+    wrapper.append(labelNode, control);
+    els.aiPreviewFields.append(wrapper);
+  });
+  if (!els.aiPreviewDialog.open) els.aiPreviewDialog.showModal();
+}
+
+function closeCandidatePreview() {
+  pendingCandidate = null;
+  pendingAIRequest = null;
+  els.aiPreviewError.textContent = "";
+  if (els.aiPreviewDialog.open) els.aiPreviewDialog.close();
+}
+
+function normalizeCandidate(moduleId, raw = {}) {
+  const source = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
+  const out = {};
+  candidateFields(moduleId).forEach(([name, , type]) => {
+    let value = source[name];
+    if (name === "packing" && Array.isArray(value)) value = value.join("\n");
+    if (type === "number") value = value === "" || value == null ? "" : Number(value);
+    else value = value == null ? "" : String(value);
+    out[name] = value;
+  });
+  if ((moduleId === "health" || moduleId === "wallet" || moduleId === "stocks") && !out.date) out.date = today();
+  if (moduleId === "wallet" && !["income", "expense"].includes(out.kind)) out.kind = "expense";
+  if (moduleId === "wallet" && !categoryOptions.includes(out.category)) out.category = "其他";
+  if (moduleId === "todos" && !["工作待办", "生活待办"].includes(out.category)) out.category = "工作待办";
+  return out;
+}
+
+function readCandidateForm() {
+  const form = new FormData(els.aiPreviewForm);
+  const data = {};
+  candidateFields(pendingCandidate.module).forEach(([name, , type]) => {
+    const value = String(form.get(name) || "").trim();
+    data[name] = type === "number" && value !== "" ? Number(value) : value;
+  });
+  return data;
+}
+
+function validateCandidate(moduleId, data) {
+  const validDate = (value) => !value || /^\d{4}-\d{2}-\d{2}$/.test(value);
+  const dateFields = ["date", "startDate", "endDate", "due"];
+  if (dateFields.some((field) => field in data && !validDate(data[field]))) return "日期必须使用 YYYY-MM-DD 格式。";
+  if (moduleId === "wallet") {
+    if (!Number.isFinite(data.amount) || data.amount <= 0) return "账目金额必须是大于 0 的数字。";
+    if (!["income", "expense"].includes(data.kind)) return "账目类型不正确。";
+    if (!categoryOptions.includes(data.category)) return "账目类别不正确。";
+  }
+  if (moduleId === "health") {
+    if (data.weight !== "" && (!Number.isFinite(data.weight) || data.weight <= 0)) return "体重必须是大于 0 的数字。";
+    if (data.calories !== "" && (!Number.isFinite(data.calories) || data.calories < 0)) return "饮品热量必须是非负数字。";
+    if (data.bowel && !["是", "否"].includes(data.bowel)) return "排便只能记录是或否。";
+    if (data.exerciseDone && !["是", "否"].includes(data.exerciseDone)) return "运动只能记录是或否。";
+  }
+  if (moduleId === "travel" && !data.destination) return "请补充旅行目的地。";
+  if (moduleId === "quotes" && !data.quote) return "请补充语录内容。";
+  if (moduleId === "todos" && !data.content) return "请补充待办内容。";
+  if (moduleId === "stocks" && !data.title) return "请补充资讯标题。";
+  if (!["health", "travel", "wallet", "quotes", "todos", "stocks"].includes(moduleId) && !data.title) return "请补充记录标题。";
+  return "";
+}
+
+function confirmCandidate(event) {
+  event.preventDefault();
+  if (!pendingCandidate) return;
+  const data = readCandidateForm();
+  const error = validateCandidate(pendingCandidate.module, data);
+  if (error) {
+    els.aiPreviewError.textContent = error;
+    return;
+  }
+  const moduleId = pendingCandidate.module;
+  commitCandidate(moduleId, data);
+  closeCandidatePreview();
+}
+
+async function retryAIRecognition() {
+  if (!pendingAIRequest) return;
+  setButtonBusy(els.retryAIBtn, true, "识别中");
+  els.aiPreviewError.textContent = "";
+  try {
+    const result = await pendingAIRequest();
+    showCandidatePreview(result, pendingAIRequest);
+  } catch (error) {
+    els.aiPreviewError.textContent = error.message;
+  } finally {
+    setButtonBusy(els.retryAIBtn, false);
+  }
+}
+
+function commitCandidate(moduleId, data) {
+  let item;
+  if (moduleId === "health") {
+    if (data.heightCm) state.settings.heightCm = data.heightCm;
+    const date = data.date || today();
+    item = state.data.health.find((record) => record.date === date);
+    if (!item) {
+      item = { id: uid("health"), date, drinks: [], createdAt: new Date().toISOString() };
+      state.data.health.push(item);
+    }
+    ["weight", "bowel", "exerciseDone", "exerciseType"].forEach((field) => {
+      if (data[field] !== "") item[field] = data[field];
+    });
+    item.drinks = item.drinks || [];
+    if (data.drinkText) item.drinks.push({ text: data.drinkText, calories: data.calories, source: "AI 估算" });
+  } else if (moduleId === "travel") {
+    item = {
+      id: uid("travel"),
+      startDate: data.startDate,
+      endDate: data.endDate,
+      destination: data.destination,
+      companions: data.companions,
+      lodging: data.lodging,
+      transport: data.transport,
+      itineraryText: data.itineraryText,
+      route: data.route,
+      notes: data.notes,
+      packingList: splitList(data.packing).map((name) => ({ id: uid("pack"), name, checked: false })),
+      createdAt: new Date().toISOString()
+    };
+    if (!item.route) item.route = makeRoute(item);
+    state.data.travel.push(item);
+  } else if (moduleId === "wallet") {
+    item = { id: uid("wallet"), ...data, createdAt: new Date().toISOString() };
+    state.data.wallet.push(item);
+  } else if (moduleId === "quotes") {
+    item = { id: uid("quote"), date: data.date || today(), quote: data.quote, context: data.context, createdAt: new Date().toISOString() };
+    state.data.quotes.push(item);
+  } else if (moduleId === "todos") {
+    item = { id: uid("todo"), ...data, done: false, createdAt: new Date().toISOString() };
+    state.data.todos.push(item);
+  } else if (moduleId === "stocks") {
+    item = { id: uid("stock"), ...data, date: data.date || today(), createdAt: new Date().toISOString() };
+    state.data.stocks.push(item);
+  } else {
+    item = { id: uid(moduleId), ...data, date: data.date || today(), createdAt: new Date().toISOString() };
+    state.data[moduleId] = state.data[moduleId] || [];
+    state.data[moduleId].push(item);
+  }
+  state.lastEntry = { module: moduleId, id: item.id };
+  saveState();
+  setActiveModule(moduleId);
+  setOutput(`# 已保存\n\n${markdownTable(["模块", "记录ID", "来源"], [[getModule(moduleId)?.name || moduleId, item.id, "AI 识别并确认"]])}`);
+}
+
 function renderOverview() {
   const rows = state.modules
     .filter((mod) => mod.enabled)
@@ -325,7 +751,7 @@ function renderHealth() {
         <div class="field"><label>运动</label><select name="exerciseDone"><option value="">未记录</option><option>是</option><option>否</option></select></div>
         <div class="field"><label>运动类型</label><input name="exerciseType" placeholder="羽毛球"></div>
         <div class="field full"><label>饮品记录</label><input name="drinkText" placeholder="例如：一杯拿铁、无糖茶、可乐 330ml"></div>
-        <div class="field full"><label>饮品图片/截图备注</label><input name="drinkImage" type="file" accept="image/*"></div>
+        <div class="field full"><label>饮品图片/截图（AI 识别）</label><input name="drinkImage" type="file" accept="image/*"></div>
         <div class="field full actions">
           <button class="primary" type="submit">保存健康记录</button>
           <button type="button" id="healthWeek">健康周报</button>
@@ -335,18 +761,52 @@ function renderHealth() {
       ${healthTable()}
     </section>`;
   document.getElementById("healthForm").addEventListener("submit", saveHealth);
-  document.getElementById("healthWeek").addEventListener("click", () => setOutput(healthReport("week")));
-  document.getElementById("healthMonth").addEventListener("click", () => setOutput(healthReport("month")));
+  document.getElementById("healthWeek").addEventListener("click", () => generateHealthReport("week"));
+  document.getElementById("healthMonth").addEventListener("click", () => generateHealthReport("month"));
   bindTableActions("health");
 }
 
-function saveHealth(event) {
+async function saveHealth(event) {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
-  state.settings.heightCm = form.get("heightCm") || "";
   const date = form.get("date") || today();
   const drinkText = (form.get("drinkText") || "").trim();
   const imageFile = form.get("drinkImage");
+  const estimated = drinkText ? estimateDrinkCalories(drinkText) : { calories: "", source: "" };
+  const needsAI = Boolean(imageFile?.name) || (drinkText && estimated.source === "未匹配，可点搜索核对");
+  if (needsAI && aiIsReady()) {
+    const baseData = {
+      date,
+      heightCm: form.get("heightCm") || "",
+      weight: form.get("weight") || "",
+      bowel: form.get("bowel") || "",
+      exerciseDone: form.get("exerciseDone") || "",
+      exerciseType: form.get("exerciseType") || ""
+    };
+    const request = async () => {
+      const imageDataUrl = imageFile?.name ? await resizeImageFile(imageFile) : "";
+      const result = await runAI({
+        task: "drink_extract",
+        input: drinkText,
+        context: { existingFields: baseData, calorieMeaning: "整杯估算 kcal" },
+        imageDataUrl
+      });
+      const description = [result.name, result.specification, result.sugar].filter(Boolean).join(" ") || drinkText;
+      return {
+        module: "health",
+        data: { ...baseData, drinkText: description, calories: result.calories ?? "" },
+        title: "确认饮品识别结果",
+        subtitle: "热量为 AI 估算值，可修改；确认前不会保存图片或记录。"
+      };
+    };
+    await requestCandidate(request, event.submitter);
+    return;
+  }
+  if (imageFile?.name) {
+    setOutput("图片尚未处理。请先在设置中配置支持图片的 Kimi 或通义千问，再重新提交。");
+    return;
+  }
+  state.settings.heightCm = form.get("heightCm") || "";
   let item = state.data.health.find((record) => record.date === date);
   if (!item) {
     item = { id: uid("health"), date, drinks: [], createdAt: new Date().toISOString() };
@@ -358,11 +818,7 @@ function saveHealth(event) {
   if (form.get("exerciseDone")) item.exerciseDone = form.get("exerciseDone");
   if (form.get("exerciseType")) item.exerciseType = form.get("exerciseType");
   if (drinkText) {
-    const estimated = estimateDrinkCalories(drinkText);
     item.drinks.push({ text: drinkText, calories: estimated.calories, source: estimated.source });
-  }
-  if (imageFile && imageFile.name) {
-    item.drinks.push({ text: `图片备注：${imageFile.name}`, calories: "", source: "已保存文件名，浏览器离线版暂不做 OCR" });
   }
   state.lastEntry = { module: "health", id: item.id };
   saveState();
@@ -434,6 +890,18 @@ function healthReport(period) {
   return `# ${title}\n\n平均体重：${avgWeight} kg\n运动天数：${exerciseDays} 天\n体重趋势：${trend}\n\n${markdownTable(["日期", "体重kg", "排便", "运动", "运动类型", "饮品热量kcal", "BMI"], rows)}`;
 }
 
+async function generateHealthReport(period) {
+  const local = healthReport(period);
+  setOutput(local);
+  if (!aiIsReady() || !filterByPeriod(state.data.health, period).length) return;
+  try {
+    const review = await runAI({ task: "health_review", context: { report: local } });
+    setOutput(`${local}\n\n## AI 简要复盘\n\n${review}`);
+  } catch {
+    setOutput(local);
+  }
+}
+
 function filterByPeriod(list, period) {
   const now = new Date();
   const current = today();
@@ -457,12 +925,13 @@ function renderTravel() {
       <form id="travelForm" class="grid">
         <div class="field"><label>开始时间</label><input name="startDate" type="date"></div>
         <div class="field"><label>结束时间</label><input name="endDate" type="date"></div>
-        <div class="field"><label>目的地</label><input name="destination" required></div>
+        <div class="field"><label>目的地</label><input name="destination" placeholder="可由截图识别"></div>
         <div class="field"><label>同行人</label><input name="companions"></div>
         <div class="field wide"><label>住宿信息</label><input name="lodging"></div>
         <div class="field"><label>交通</label><input name="transport"></div>
         <div class="field full"><label>行程安排</label><textarea name="itinerary" rows="4" placeholder="一天一行：2026-08-01 西湖、灵隐寺"></textarea></div>
         <div class="field full"><label>截图识别文本/备注</label><textarea name="notes" rows="3" placeholder="可粘贴截图 OCR 后的文字，或保存重要备注。"></textarea></div>
+        <div class="field full"><label>行程截图（AI 识别）</label><input name="travelImage" type="file" accept="image/*"></div>
         <div class="field full"><label>物品清单（逗号或换行分隔）</label><textarea name="packing" rows="2" placeholder="身份证、充电器、雨伞"></textarea></div>
         <div class="field full actions"><button class="primary" type="submit">保存旅行</button><button type="button" id="travelSummary">汇总全部旅行清单</button></div>
       </form>
@@ -474,9 +943,42 @@ function renderTravel() {
   bindPackingActions();
 }
 
-function saveTravel(event) {
+async function saveTravel(event) {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
+  const imageFile = form.get("travelImage");
+  if (imageFile?.name) {
+    if (!aiIsReady()) {
+      setOutput("图片尚未处理。请先在设置中配置支持图片的 Kimi 或通义千问，再重新提交。");
+      return;
+    }
+    const existing = {
+      startDate: form.get("startDate") || "",
+      endDate: form.get("endDate") || "",
+      destination: form.get("destination") || "",
+      companions: form.get("companions") || "",
+      lodging: form.get("lodging") || "",
+      transport: form.get("transport") || "",
+      itineraryText: form.get("itinerary") || "",
+      notes: form.get("notes") || "",
+      packing: form.get("packing") || ""
+    };
+    const request = async () => {
+      const imageDataUrl = await resizeImageFile(imageFile);
+      const result = await runAI({ task: "travel_extract", input: existing.notes, context: { existingFields: existing }, imageDataUrl });
+      return {
+        module: "travel",
+        data: { ...result, ...Object.fromEntries(Object.entries(existing).filter(([, value]) => value)), route: result.route || "" },
+        title: "确认旅行截图识别结果"
+      };
+    };
+    await requestCandidate(request, event.submitter);
+    return;
+  }
+  if (!form.get("destination")) {
+    setOutput("请填写旅行目的地，或上传行程截图交给 AI 识别。");
+    return;
+  }
   const trip = {
     id: uid("travel"),
     startDate: form.get("startDate"),
@@ -594,7 +1096,7 @@ function renderWallet() {
       ${walletTable()}
     </section>`;
   document.getElementById("walletForm").addEventListener("submit", saveWallet);
-  document.getElementById("monthBill").addEventListener("click", () => setOutput(walletReport()));
+  document.getElementById("monthBill").addEventListener("click", generateWalletReport);
   bindTableActions("wallet");
 }
 
@@ -645,6 +1147,18 @@ function walletReport() {
   return `# ${month} 月度账单\n\n${markdownTable(["总收入", "总支出", "结余", "最高花销类目"], [[income.toFixed(2), expense.toFixed(2), (income - expense).toFixed(2), top]])}\n\n## 类目占比\n\n${catRows.length ? markdownTable(["类别", "支出", "占比"], catRows) : "暂无支出。"}\n\n复盘：本月花销占比最高为「${top}」，可优先检查该类目是否有可调整项目。`;
 }
 
+async function generateWalletReport() {
+  const local = walletReport();
+  setOutput(local);
+  if (!aiIsReady() || !state.data.wallet.length) return;
+  try {
+    const review = await runAI({ task: "wallet_review", context: { report: local } });
+    setOutput(`${local}\n\n## AI 消费复盘\n\n${review}`);
+  } catch {
+    setOutput(local);
+  }
+}
+
 function renderQuotes() {
   els.moduleContent.innerHTML = `
     <section class="module-section">
@@ -658,7 +1172,7 @@ function renderQuotes() {
       ${quoteTable()}
     </section>`;
   document.getElementById("quoteForm").addEventListener("submit", saveQuote);
-  document.getElementById("quoteDiary").addEventListener("click", () => setOutput(quoteDiary()));
+  document.getElementById("quoteDiary").addEventListener("click", generateQuoteDiary);
   bindTableActions("quotes");
 }
 
@@ -696,6 +1210,18 @@ function quoteDiary() {
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((item) => `${item.date}，${item.context ? `${item.context}，` : ""}端端说：“${item.quote}”`);
   return `# 端端语录日记\n\n${paragraphs.join("\n\n")}`;
+}
+
+async function generateQuoteDiary() {
+  const local = quoteDiary();
+  setOutput(local);
+  if (!aiIsReady() || !state.data.quotes.length) return;
+  try {
+    const diary = await runAI({ task: "quote_diary", context: { quotes: state.data.quotes.map(({ date, quote, context }) => ({ date, quote, context })) } });
+    setOutput(`# 端端语录日记\n\n${diary}`);
+  } catch {
+    setOutput(local);
+  }
 }
 
 function renderTodos() {
@@ -782,7 +1308,7 @@ function renderStocks() {
       ${stockTable()}
     </section>`;
   document.getElementById("stockForm").addEventListener("submit", saveStock);
-  document.getElementById("stockSummary").addEventListener("click", () => setOutput(stockSummary()));
+  document.getElementById("stockSummary").addEventListener("click", generateStockSummary);
   document.getElementById("stockSearch").addEventListener("click", () => window.open("https://www.bing.com/search?q=%E8%82%A1%E5%B8%82%E8%B5%84%E8%AE%AF", "_blank"));
   bindTableActions("stocks");
 }
@@ -820,6 +1346,21 @@ function stockTable() {
 function stockSummary() {
   const rows = state.data.stocks.map((item) => [item.date, item.symbol || "", item.title, item.source || "", item.summary || ""]);
   return `# 股市资讯汇总\n\n${rows.length ? markdownTable(["日期", "股票/指数", "标题", "来源", "摘要"], rows) : "暂无股市资讯。"}`;
+}
+
+async function generateStockSummary() {
+  const local = stockSummary();
+  setOutput(local);
+  if (!aiIsReady() || !state.data.stocks.length) return;
+  try {
+    const summary = await runAI({
+      task: "stock_summary",
+      context: { notice: "这些是用户提供的历史材料，不是实时行情。", records: state.data.stocks }
+    });
+    setOutput(`${local}\n\n## AI 材料整理\n\n${summary}`);
+  } catch {
+    setOutput(local);
+  }
 }
 
 function renderGenericModule() {
@@ -942,13 +1483,15 @@ function flattenRecord(item) {
   return out;
 }
 
-function handleQuickInput(text) {
+async function handleQuickInput(text) {
   if (!text) return;
   const compact = text.replace(/\s+/g, "");
   if (compact === "工作台总览") return setOutput(renderOverview());
-  if (compact === "健康周报") return setOutput(healthReport("week"));
-  if (compact === "健康月报") return setOutput(healthReport("month"));
-  if (compact === "月度账单") return setOutput(walletReport());
+  if (compact === "健康周报") return generateHealthReport("week");
+  if (compact === "健康月报") return generateHealthReport("month");
+  if (compact === "月度账单") return generateWalletReport();
+  if (["端端语录汇总", "端端日记", "语录汇总"].includes(compact)) return generateQuoteDiary();
+  if (compact === "股市资讯汇总") return generateStockSummary();
   if (compact === "全部待办") return setOutput(todoReport(false));
   if (compact === "仅未完成事项") return setOutput(todoReport(true));
   if (compact === "导出全部记录") return setOutput(exportAllMarkdown());
@@ -957,7 +1500,38 @@ function handleQuickInput(text) {
   if (/^删除.+模块$/.test(compact)) return removeModule(compact.replace(/^删除/, "").replace(/模块$/, ""));
   if (compact.startsWith("修改") && compact.includes("模块规则")) return updateModuleRule(text);
   const routed = autoRoute(text);
-  if (!routed) setOutput("无法判断信息归属哪个模块。请补充关键词，例如：体重、支出、待办、端端说、旅行、股市。");
+  if (routed) return;
+  if (!aiIsReady()) {
+    setOutput("无法可靠判断信息归属。请补充模块关键词，或在设置中配置 AI 后重新提交。");
+    return;
+  }
+  const request = async () => {
+    const modules = state.modules.filter((mod) => mod.enabled).map(({ id, name, rules }) => ({ id, name, rules }));
+    const result = await runAI({
+      task: "quick_route",
+      input: text,
+      context: {
+        modules,
+        allowedFields: {
+          health: ["date", "heightCm", "weight", "bowel", "exerciseDone", "exerciseType", "drinkText", "calories"],
+          travel: ["startDate", "endDate", "destination", "companions", "lodging", "transport", "itineraryText", "route", "packing", "notes"],
+          wallet: ["date", "kind", "amount", "category", "note"],
+          quotes: ["date", "quote", "context"],
+          todos: ["category", "due", "content"],
+          stocks: ["date", "symbol", "title", "source", "summary"],
+          dynamicModule: ["date", "title", "content"]
+        },
+        walletCategories: categoryOptions
+      }
+    });
+    const confidence = Number(result.confidence);
+    if (!Number.isFinite(confidence) || confidence < 0.55) {
+      const missing = Array.isArray(result.missingFields) ? result.missingFields.join("、") : "模块信息";
+      throw new Error(`归类置信度较低，请补充：${missing || "模块信息"}。`);
+    }
+    return { module: result.module, data: result.data, title: "确认随手记识别结果" };
+  };
+  await requestCandidate(request, els.quickSubmit);
 }
 
 function autoRoute(text) {
@@ -982,14 +1556,16 @@ function autoRoute(text) {
   }
   if (/饮|奶茶|咖啡|可乐|茶|牛奶|酸奶|啤酒|果汁/.test(text)) {
     const estimated = estimateDrinkCalories(text);
-    quickHealth({ drinks: [{ text, calories: estimated.calories, source: estimated.source }] });
-    return true;
+    if (estimated.source !== "未匹配，可点搜索核对") {
+      quickHealth({ drinks: [{ text, calories: estimated.calories, source: estimated.source }] });
+      return true;
+    }
   }
-  if (/收入|支出|花了|消费|付款|买/.test(text) && /\d+/.test(text)) {
+  if (/收入|支出|花了|消费|付款/.test(text) && /\d+/.test(text)) {
     quickWallet(text);
     return true;
   }
-  if (/待办|截止|完成|要做|提醒/.test(text)) {
+  if (/(工作待办|生活待办)/.test(text) && /\d{4}-\d{2}-\d{2}/.test(text)) {
     quickTodo(text);
     return true;
   }
@@ -998,10 +1574,12 @@ function autoRoute(text) {
     return true;
   }
   if (/旅行|目的地|住宿|景点|行程/.test(text)) {
+    if (aiIsReady()) return false;
     quickGenericTrip(text);
     return true;
   }
   if (/股票|股市|A股|港股|美股|指数|基金/.test(text)) {
+    if (aiIsReady()) return false;
     quickStock(text);
     return true;
   }

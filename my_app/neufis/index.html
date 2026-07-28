@@ -56,6 +56,7 @@
         <div id="settingsMenu" class="sidebar-actions" aria-label="工作台设置">
           <span class="settings-title">设置</span>
           <button id="installBtn" class="hidden">安装到手机</button>
+          <button id="aiSettingsBtn">AI 设置</button>
           <button id="overviewBtn">工作台总览</button>
           <button id="exportExcelBtn">导出 Excel</button>
           <label class="file-button">
@@ -106,6 +107,91 @@
       </section>
     </main>
 
+    <dialog id="aiSettingsDialog" class="app-dialog" aria-labelledby="aiSettingsTitle">
+      <form id="aiSettingsForm" class="dialog-card">
+        <header class="dialog-header">
+          <div>
+            <h2 id="aiSettingsTitle">AI 设置</h2>
+            <p>Key 仅保存在当前浏览器，不随工作台数据导出。</p>
+          </div>
+          <button class="icon-button dialog-close" type="button" aria-label="关闭" title="关闭">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </header>
+        <div class="dialog-body grid">
+          <div class="field full">
+            <label for="aiProvider">厂商</label>
+            <select id="aiProvider" name="provider">
+              <option value="deepseek">DeepSeek</option>
+              <option value="kimi">Kimi</option>
+              <option value="qwen">通义千问</option>
+              <option value="custom">自定义 OpenAI 兼容接口</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="aiApiKey">API Key</label>
+            <input id="aiApiKey" name="apiKey" type="password" autocomplete="new-password" placeholder="填写新的 API Key" />
+            <small id="aiKeyHint" class="field-hint">尚未保存</small>
+          </div>
+          <div id="aiCustomFields" class="field-group full hidden">
+            <div class="field full">
+              <label for="aiBaseUrl">API Base URL</label>
+              <input id="aiBaseUrl" name="baseUrl" type="url" inputmode="url" placeholder="https://example.com/v1" />
+            </div>
+            <div class="field full">
+              <label for="aiModel">文本模型</label>
+              <input id="aiModel" name="model" placeholder="model-name" />
+            </div>
+          </div>
+          <div class="field full ai-status-row">
+            <span id="aiConnectionStatus" class="status-pill">尚未验证</span>
+          </div>
+        </div>
+        <footer class="dialog-actions">
+          <button id="clearAIKeyBtn" class="danger" type="button">清除当前 Key</button>
+          <button class="dialog-close" type="button">取消</button>
+          <button id="saveTestAIBtn" class="primary" type="submit">保存并测试</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="aiPreviewDialog" class="app-dialog" aria-labelledby="aiPreviewTitle">
+      <form id="aiPreviewForm" class="dialog-card">
+        <header class="dialog-header">
+          <div>
+            <h2 id="aiPreviewTitle">确认 AI 识别结果</h2>
+            <p id="aiPreviewSubtitle">确认前不会写入工作台。</p>
+          </div>
+          <button class="icon-button preview-cancel" type="button" aria-label="关闭" title="关闭">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </header>
+        <div id="aiPreviewFields" class="dialog-body grid"></div>
+        <p id="aiPreviewError" class="dialog-message error-text" aria-live="polite"></p>
+        <footer class="dialog-actions">
+          <button id="retryAIBtn" type="button">重新识别</button>
+          <button class="preview-cancel" type="button">取消</button>
+          <button class="primary" type="submit">确认保存</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="aiPrivacyDialog" class="app-dialog compact-dialog" aria-labelledby="aiPrivacyTitle">
+      <section class="dialog-card">
+        <header class="dialog-header">
+          <div>
+            <h2 id="aiPrivacyTitle">使用 AI 前确认</h2>
+            <p>相关文本或图片会从本设备直接发送给你选择的 AI 厂商。图片仅在本次请求期间使用，不保存到工作台。</p>
+          </div>
+        </header>
+        <footer class="dialog-actions">
+          <button id="cancelAIPrivacyBtn" type="button">取消</button>
+          <button id="confirmAIPrivacyBtn" class="primary" type="button">同意并继续</button>
+        </footer>
+      </section>
+    </dialog>
+
+    <script src="ai.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
