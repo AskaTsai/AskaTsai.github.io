@@ -1,0 +1,1123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>通用知识库</title>
+  <style>
+    :root{--bg:#f5f7fb;--paper:#fff;--ink:#172033;--muted:#667085;--line:#e4e8f0;--brand:#3157d5;--brand2:#243f9e;--soft:#eef2ff;--danger:#c9362b;--shadow:0 18px 50px rgba(31,42,68,.10)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+    button,input{font:inherit}.hidden{display:none!important}
+    .login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 20% 10%,#e0e7ff 0,transparent 32%),radial-gradient(circle at 85% 85%,#dbeafe 0,transparent 34%),var(--bg)}
+    .login-card{width:min(420px,100%);background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.8);border-radius:22px;padding:38px;box-shadow:var(--shadow)}
+    .mark{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:var(--brand);color:#fff;font-size:25px;font-weight:800}.login h1{font-size:25px;margin:20px 0 5px}.login p{color:var(--muted);margin:0 0 24px}
+    .field{display:block;font-weight:650;margin-bottom:8px}.password-row{display:flex;border:1px solid #cfd5e1;border-radius:11px;background:#fff;overflow:hidden;transition:.2s}.password-row:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(49,87,213,.12)}
+    .password-row input{min-width:0;flex:1;border:0;outline:0;padding:12px 14px}.reveal{border:0;background:transparent;color:var(--muted);padding:0 13px;cursor:pointer}.login-btn{width:100%;border:0;border-radius:11px;background:var(--brand);color:#fff;padding:12px;margin-top:14px;font-weight:700;cursor:pointer}.login-btn:hover{background:var(--brand2)}.error{color:var(--danger)!important;font-size:13px;min-height:23px;margin:8px 0 0!important}
+    .app{min-height:100vh}.topbar{height:66px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .brand{font-weight:800;font-size:18px;white-space:nowrap}.search{position:relative;max-width:620px;flex:1;margin:auto}.search input{width:100%;border:1px solid var(--line);border-radius:10px;background:#f8fafc;padding:9px 38px 9px 36px;outline:0}.search input:focus{background:#fff;border-color:var(--brand)}.search-icon{position:absolute;left:12px;top:8px;color:var(--muted)}.clear{position:absolute;right:8px;top:5px;border:0;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}.menu{display:none;border:0;background:transparent;font-size:23px;cursor:pointer}.logout{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:34px;max-width:1240px;margin:0 auto;padding:30px 24px 70px}.sidebar{position:sticky;top:95px;align-self:start;max-height:calc(100vh - 120px);overflow:auto;padding:4px 18px 18px 0}.sidebar-title{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.12em;margin:0 0 10px}.toc{list-style:none;padding:0;margin:0}.toc li{margin:2px 0}.toc a{display:block;color:#526078;text-decoration:none;padding:6px 10px;border-radius:7px;line-height:1.35}.toc a:hover,.toc a.active{color:var(--brand);background:var(--soft)}.toc .level-2 a{padding-left:22px;font-size:13px}
+    main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:38px 42px;box-shadow:0 7px 24px rgba(31,42,68,.05)}h1{font-size:29px;line-height:1.3;margin:0 0 20px}h2{font-size:21px;margin:42px 0 15px;padding-top:6px;border-top:1px solid var(--line)}h1+h2{border:0;margin-top:25px}blockquote{margin:14px 0;padding:8px 16px;background:#f8fafc;border-left:4px solid #a5b4fc;color:var(--muted)}blockquote p{margin:0}
+    .table-wrap{width:100%;overflow-x:auto;margin:16px 0 28px;border:1px solid var(--line);border-radius:10px}table{width:100%;min-width:760px;border-collapse:collapse;font-size:14px;line-height:1.55}th{background:#f1f4f9;text-align:left;font-weight:750;white-space:nowrap}th,td{padding:10px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}th:last-child,td:last-child{border-right:0}tbody tr:hover{background:#fafbff}td:first-child,td:last-child{white-space:nowrap;text-align:center}td:last-child{font-weight:750;color:var(--brand)}mark{background:#fde68a;color:inherit;padding:0 1px;border-radius:2px}.empty{padding:60px 20px;text-align:center;color:var(--muted)}
+    @media(max-width:800px){.topbar{height:auto;min-height:62px;padding:10px 14px;flex-wrap:wrap}.menu{display:block}.brand{font-size:16px}.search{order:2;flex-basis:100%;max-width:none}.logout{margin-left:auto}.layout{display:block;padding:16px 12px 50px}.sidebar{display:none;position:fixed;z-index:30;top:0;left:0;width:285px;height:100vh;max-height:none;background:#fff;padding:24px;box-shadow:var(--shadow)}.sidebar.open{display:block}main{padding:25px 18px;border-radius:12px}h1{font-size:24px}h2{font-size:19px}.login-card{padding:30px 24px}}
+    @media print{.topbar,.sidebar,.login{display:none!important}.app{display:block!important}.layout{display:block;max-width:none;padding:0}main{border:0;box-shadow:none;padding:0}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}}
+  </style>
+</head>
+<body>
+  <section id="login" class="login">
+    <form id="loginForm" class="login-card" autocomplete="off">
+      <div class="mark">知</div><h1>通用知识库</h1><p>请输入访问密码后继续</p>
+      <label class="field" for="password">访问密码</label>
+      <div class="password-row"><input id="password" type="password" required autofocus placeholder="请输入密码"><button id="reveal" class="reveal" type="button" aria-label="显示密码">显示</button></div>
+      <button class="login-btn" type="submit">进入知识库</button><p id="error" class="error" role="alert"></p>
+    </form>
+  </section>
+  <div id="app" class="app hidden">
+    <header class="topbar"><button id="menu" class="menu" aria-label="打开目录">☰</button><div class="brand">通用知识库</div><div class="search"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="搜索题目、选项或答案…" aria-label="搜索内容"><button id="clear" class="clear hidden" aria-label="清除搜索">×</button></div><button id="logout" class="logout">退出</button></header>
+    <div class="layout"><aside id="sidebar" class="sidebar"><p class="sidebar-title">内容目录</p><nav><ul id="toc" class="toc"></ul></nav></aside><main id="content"><h1 id="通用知识考试样题一">通用知识考试样题（一）</h1>
+<blockquote>
+<p>页码：-243‑ ~ -248‑</p>
+</blockquote>
+<h2 id="一单项选择题160">一、单项选择题（1‑60）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>题号</th>
+<th>题干</th>
+<th>选项</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>参评人员涉及违纪违规行为的，经（）名及以上工作人员签字报考场负责人确认。</td>
+<td>A.1 B.2 C.3 D.4</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>在综合评审中，对参评人员工作业绩材料的审核，首要原则是核实其（）。</td>
+<td>A.数量多少 B.真实性和有效性 C.装帧是否精美 D.是否由他人代写</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>参评人员由他人冒名顶替参加评价的，应（）。</td>
+<td>A.批评教育 B.取消当次成绩 C.取消其当次全部科目评价成绩，2年内不得参加技能评价 D.永久禁止参加评价</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>考评结束后，考评员应（）。</td>
+<td>A.立即离开现场，后续工作由工作人员负责 B.妥善保管评分记录、试卷等资料，并配合做好汇总和交接工作 C.将评分记录带离评价机构 D.随意丢弃草稿纸等含有评分过程信息的材料</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>()是职业技能认定的核心内容，是区别于其他考试制度的突出特征。</td>
+<td>A.职业分类 B.操作技能考核 C.理论知识考核 D.职业技能国家题库</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>()不属于考评前准备的内容。</td>
+<td>A.熟悉考核方案和评分标准 B.检查场地、设备、材料 C.对参评人员进行技能培训 D.参加考评例会，明确分工</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>浙江省专项职业能力考核规范开发周期一般为（）个月。</td>
+<td>A.6 B.12 C.18 D.24</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>对尚未纳入国家职业分类大典，符合新兴产业和地方特色产业发展需要的技能项目可开展（）。</td>
+<td>A.专项职业能力考核 B.特色专业能力考核 C.新兴产业能力考核 D.地方特色能力考核</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>职业技能所需的知识是指（）知识。</td>
+<td>A.识记型 B.应用型 C.操作型 D.心智型</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>《职业技能等级认定工作规程(试行)》的制定目的不包括（）。</td>
+<td>A.深化技能人员职业资格制度改革 B.建立职业技能等级制度 C.做好技能人才评价工作 D.取消所有职业资格证书</td>
+<td>D</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>终结性评价的主要目的是（）。</td>
+<td>A.改进教学过程 B.认定技能等级水平 C.激发学习兴趣 D.提供反馈指导</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>职业标准编制专家组中实际工作专家应占编写专家组总人数的（）以上。</td>
+<td>A.1/5 B.1/4 C.1/3 D.1/2</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>某认定机构开展互联网营销师三级等级认定，参加本次技能操作考核认定的参评人员为12人，该机构需安排最少（）名考评员。</td>
+<td>A.2 B.3 C.4 D.5</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>职业技能等级证书在全国范围内（）。</td>
+<td>A.部分有效 B.无效，需重新认证 C.仅在发证省份有效 D.通用有效</td>
+<td>D</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>评价题库的动态更新机制主要依据不包括（）。</td>
+<td>A.职业技能标准的修订 B.新技术、新工艺、新规范的应用 C.考评人员评分偏好 D.以往考试数据的分析结果</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>党中央召开中央人才工作会议的时间是（）。</td>
+<td>A.2021年9月26日至27日 B.2021年9月27日至28日 C.2021年10月27日至28日 D.2021年11月27日至28日</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>在考核开始前，考评组长组织考评人员统一评分尺度，这个过程称为（）。</td>
+<td>A.考评预热 B.标准校准 C.考前动员 D.技术交底</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>考评小组在考评前召开准备会，核心内容应是（）。</td>
+<td>A.统一评分标准、方法和程序，明确分工与纪律 B.商量如何控制本次考试的总体通过率 C.分配各自需要“照顾”的参评人员名单 D.讨论考评结束后的聚餐安排</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>19</td>
+<td>一份设计良好的实操考核任务书，应首先明确（）。</td>
+<td>A.所用工具的品牌 B.任务目标、考评要点和评分标准 C.考场的环境温度 D.考评人员的姓名</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td>考评人员不得接受参评人员的礼品、宴请，这体现考评员职业道德的（）要求。</td>
+<td>A.公正 B.诚信廉洁 C.专业 D.奉献</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>21</td>
+<td>执行考评时，考评人员发生误评、漏评，出现1‑2处评分问题，记（）分。</td>
+<td>A.2 B.4 C.12 D.24</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>22</td>
+<td>考评人员年度记分达到（）分，属地人力资源社保部门或评价机构注销其考评人员资格。</td>
+<td>A.12 B.24 C.36 D.6</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>23</td>
+<td>除特殊贡献的，原则上要求特级技师评聘满（）年且仍从事本职业工作的可以申报首席技师。</td>
+<td>A.1 B.3 C.5 D.7</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>24</td>
+<td>各级人力资源社会保障部门要充分发挥职能作用，进一步健全完善落实就业创业、人事人才、工资待遇、()等政策。</td>
+<td>A.社会保障 B.劳动保障 C.医疗保障 D.住房保障</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>25</td>
+<td>对于不合格项的判定，必须（）。</td>
+<td>A.由两名以上考评人员共同确认 B.由考评组长一人决定 C.找到明确的评分标准依据 D.征得参评人员同意</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>26</td>
+<td>树立职业资格证书权威性的关键是（）。</td>
+<td>A.面向劳动力市场需求 B.完善制度 C.完善质量保证体系 D.拓宽证书覆盖面</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>27</td>
+<td>对于测量参评人员综合应用能力的题目，最合适的题型是（）。</td>
+<td>A.判断题 B.选择题 C.案例分析题或论述题 D.填空题</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>28</td>
+<td>职业道德是人们在（）中应遵循的特定职业规范和行为准则。</td>
+<td>A.市场经济 B.就业活动 C.职业活动 D.劳动活动</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>29</td>
+<td>下列哪项不是“新八级”制度增加的等级?()</td>
+<td>A.学徒工 B.初级工 C.特级技师 D.首席技师</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>30</td>
+<td>企业自主开展职业技能等级认定的首要条件是（）。</td>
+<td>A.拥有高级技师数量达标 B.经人社部门备案成为评价机构 C.年营业额超过1亿元 D.获得ISO认证</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>31.()可申报本职业四级。</td>
+<td>A.累计从事本职业或相关职业工作满4年的小李 B.累计从事本职业或相关职业工作满5年的小王 C.取得本职业或相关职业五级职业技能等级证书后，累计从事本职业或相关职业工作满1年的小张 D.取得本职业或相关职业五级职业技能等级证书后，累计从事本职业或相关职业工作满2年的小陈</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>32.()原则不是国家职业标准编制原则。</td>
+<td>A.经济性 B.等级性 C.规范性 D.可操作性</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>33</td>
+<td>档案袋评价法最适用于（）的评价。</td>
+<td>A.单一技能操作 B.理论知识掌握程度 C.长期、综合性的学习与发展过程 D.紧急情况下的应变能力</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>34</td>
+<td>各级人社部门要深入实施专业技术人才知识更新工程，创新实施（）。</td>
+<td>A.工程师培养项目 B.数字工程师项目 C.技术大师项目 D.创新人才项目</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>35</td>
+<td>职业技能评价涉及上千个广大劳动者的切身利益，场所分散，设备千差万别，这决定考评工作具备（）。</td>
+<td>A.标准性和规范性 B.技术性和复杂性 C.独立性和权威性 D.变化性和创新性</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>36.()原则上永久保存。</td>
+<td>A.评分表 B.成绩汇总表 C.现场监控影像 D.发证名册</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>37</td>
+<td>参评人员串通作弊或参与有组织作弊的，应（）。</td>
+<td>A.取消当次成绩 B.1年内不得参加评价 C.取消其当次全部科目评价成绩，5年内不得参加技能评价 D.永久禁止参加评价</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>38.()是指根据劳动管理的需要，按照生产劳动的性质、工艺技术的特征或者服务活动的特点而划分的工作种类。</td>
+<td>A.工种 B.岗位 C.技能 D.职业</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>39.()是指试卷所测内容应结构性涵盖理论知识考评要素细目表的考评点。</td>
+<td>A.水平规则 B.层次规则 C.分布规则 D.难度规则</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>40</td>
+<td>考评人员在考场内应始终保持（）。</td>
+<td>A.频繁走动，近距离观察每个参评人员 B.严肃活跃，可与参评人员开开玩笑 C.专注沉稳，不做与考评无关的事 D.坐在固定位置，无需观察参评人员</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>41.()是认定活动的主导因素，其行为直接决定着认定的质量。</td>
+<td>A.考评人员 B.监考人员 C.参评人员 D.考务人员</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>42</td>
+<td>考评人员在评分时，如果发现自己的评分结果与其他考评人员持续地存在显著差异，首先应该（）。</td>
+<td>A.坚持自己的判断 B.怀疑他人水平 C.重新审视自己的评分尺度是否与统一标准一致 D.取一个平均值</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>43.“以参评人员能够完成的任务为核心”进行评价，这种理念属于（）。</td>
+<td>A.能力本位评价 B.知识本位评价 C.态度本位评价 D.资历本位评价</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>44</td>
+<td>考务人员利用工作职权徇私或打击报复参评人员等违纪违规行为的，应（）。</td>
+<td>A.内部警告 B.取消其当年参加评价工作的资格 C.调离岗位 D.罚款处理</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>45</td>
+<td>《关于进一步加强高技能人才与专业技术人才职业发展贯通的实施办法》(浙人社发【2022】77号)中规定高技能人才参加职称评审，将学历、论文、外语、计算机等的要求（）。</td>
+<td>A.作为重要参考条件 B.作为限制性条件 C.不作为限制性条件 D.由评审委员会自行决定</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>46</td>
+<td>各级人力资源社会保障部门要认真学习、深刻领会习近平总书记重要指示精神，增强做好技工教育、职业培训和技能人才工作的（）。</td>
+<td>A.紧迫感和危机感 B.认同感和归属感 C.自豪感和成就感 D.责任感和使命感</td>
+<td>D</td>
+</tr>
+<tr class="odd">
+<td>47</td>
+<td>职业教育是培养技术技能人才、促进就业创业创新、推动（）水平的重要基础。</td>
+<td>A.中国制造和服务 B.中国制造 C.中国经济 D.中国品牌</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>48</td>
+<td>职业技能等级认定的基本原则之一是坚持（），以品德、能力、业绩、贡献为导向。</td>
+<td>A.能力为本 B.科学评价 C.理论优先 D.学历导向</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>49</td>
+<td>考评人员在执评期间，应当主动回避的是（）。</td>
+<td>A.与自己来自同一城市的参评人员 B.三年内曾是自己学生的参评人员 C.参评人员 D.操作水平较差的参评人员</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>50.()是职业技能等级制度的生命线。</td>
+<td>A.政策法规系统 B.组织实施系统 C.质量保证系统 D.监督检查系统</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>51</td>
+<td>浙江省技能人才评价违纪违规处理工作指引所称的技能人才评价不包括（）。</td>
+<td>A.技能人员职业资格评价 B.职业技能等级认定 C.专项职业能力考核 D.专业技术职称评审</td>
+<td>D</td>
+</tr>
+<tr class="even">
+<td>52</td>
+<td>参评人员有下列行为的，取消其当次该科目的评价成绩。()</td>
+<td>A.携带禁携物品，经提醒拒不改正 B.抄袭或者协助他人抄袭试题答案 C.故意损毁试卷 D.故意损毁评价设备，造成主要零部件损坏</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>53</td>
+<td>参评人员在考核中因设备突发故障而中断操作，考评人员应首先（）。</td>
+<td>A.记录中断时间，并启动备用的设备或方案 B.直接判定该参评人员不合格 C.用自己的手机帮助参评人员查找故障原因 D.让其他参评人员先考，故障修复后再说</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>54</td>
+<td>职业技能等级证书编码规则则规定第16位阿拉伯数字代表（）。</td>
+<td>A.技能等级代码 B.发证年份代码 C.机构代码 D.流水号</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>55</td>
+<td>考务人员未按评价标准执行，对参评人员资格审核不严的，应（）。</td>
+<td>A.批评教育 B.取消其当年参加评价工作的资格，由评价机构按有关规定作出相应处理 C.罚款处理 D.移交司法机关</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>56</td>
+<td>一名考评员在执行考评任务时，遇到与自己存在亲属关系的参评人员，正确的做法是（）。</td>
+<td>A.正常参与考评，但评分更严格以示公正 B.立即向评价活动负责人申请回避 C.私下与其他考评员交换考评对象 D.若无人发现，可继续参与考评</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>57</td>
+<td>职业标准应客观、准确地反映工作现场对从业人员的知识和技能要求，体现了国家职业标准编制的（）原则。</td>
+<td>A.整体性 B.等级性 C.规范性 D.实用性</td>
+<td>D</td>
+</tr>
+<tr class="even">
+<td>58</td>
+<td>层次属性一般用（）方式表示。</td>
+<td>A.考评点位代码 B.考评要素 C.考评细目表 D.考评试题</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>59</td>
+<td>《关于加强新时代高技能人才队伍建设的意见》中提出的“十四五”时期末技能人才占就业人员的比例目标是（）。</td>
+<td>A.1/2 B.1/3 C.1/4 D.1/5</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>60</td>
+<td>职业技能等级认定的实施主体是（）。</td>
+<td>A.任意培训机构 B.经人社部门备案的评价机构 C.行业协会 D.企业</td>
+<td>B</td>
+</tr>
+</tbody>
+</table>
+<h2 id="二多项选择题6178">二、多项选择题（61‑78）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>题号</th>
+<th>题干</th>
+<th>选项</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>61</td>
+<td>技能人才评价命制的试题初稿完成后，应提交审核专家进行审核。审核内容主要有（）等。</td>
+<td>A.考评蓝图的符合性 B.考评方式和题型的恰当性 C.试题内容的正确性、独立性和公平性 D.试题表述及作答要求的准确性 E.评分规则的可操作性</td>
+<td>ABCDE</td>
+</tr>
+<tr class="even">
+<td>62</td>
+<td>浙江省市级人社部门负责指导本地评价机构（）等工作。</td>
+<td>A.制定通用知识培训课件 B.制定培训参考资料科目清单 C.制定专业技能教学大纲 D.制定专业技能培训材料 E.建立专业技能考评技术考核题库</td>
+<td>ABCDE</td>
+</tr>
+<tr class="odd">
+<td>63</td>
+<td>浙江省人社部门负责全省考评人员队伍建设工作的（）。</td>
+<td>A.政策制定 B.统筹规划 C.监督管理 D.培训 E.考核</td>
+<td>ABCDE</td>
+</tr>
+<tr class="even">
+<td>64</td>
+<td>评价机构发布的“认定公告”中，必须包含的内容有（）。</td>
+<td>A.认定的职业、等级、时间 B.报名条件、联系方式和收费标准 C.考评小组成员的完整名单 D.指定的官方成绩查询渠道和证书查询平台 E.详细具体的考核题目或样题</td>
+<td>ABCD</td>
+</tr>
+<tr class="odd">
+<td>65</td>
+<td>依据国家规定，职业技能等级证书用印包含（）等要求。</td>
+<td>A.证书加盖评价机构法人代表私章 B.证书加盖评价机构的章 C.评价机构下属分支机构颁发的证书加盖评价机构和分支机构两个印章 D.评价机构下属分支机构颁发的证书只需要盖分支机构印章 E.人力资源和社会保障部的官方印章</td>
+<td>BC</td>
+</tr>
+<tr class="even">
+<td>66</td>
+<td>浙江省实施“技能照亮前程”培训行动推出了（）等措施。</td>
+<td>A.推行“订单式”培训促进精准就业 B.健全覆盖城乡的公共培训网络 C.强化职业学校技能支撑作用 D.加强大学生就业技能培训 E.深化职业技能培训“四化”建设</td>
+<td>ABCDE</td>
+</tr>
+<tr class="odd">
+<td>67</td>
+<td>按照职业活动中所要求的各种操作技能的重要程度划分为（）操作活动要求。</td>
+<td>A.基础性操作 B.主体性操作 C.辅助性操作 D.规范性操作 E.日常性操作</td>
+<td>ABC</td>
+</tr>
+<tr class="even">
+<td>68</td>
+<td>考评人员在执考过程中遇到突发安全事件，应当（）。</td>
+<td>A.立即中止考试 B.组织人员疏散 C.报告现场负责人 D.自行处理事故现场 E.事情不紧急，先考完再说</td>
+<td>ABC</td>
+</tr>
+<tr class="odd">
+<td>69</td>
+<td>职业技能等级证书的数据安全管理要求包括（）。</td>
+<td>A.建立数据加密存储机制 B.严格管理证书查询权限 C.定期备份重要数据 D.公开考生个人信息 E.证书储存服务器应当专机专用</td>
+<td>ABCE</td>
+</tr>
+<tr class="even">
+<td>70</td>
+<td>《关于推动技能强企工作的指导意见》(人社部发〔2025〕3号)文件中提出打造产教评生态链，由（）。</td>
+<td>A.企业出岗位、出标准、出师傅 B.学校出学生、出教师、出教学资源 C.培训单位出岗位、出标准、出师傅 D.政府出政策、出服务、出管理 E.学校出标准、出教师、出服务</td>
+<td>ABD</td>
+</tr>
+<tr class="odd">
+<td>71</td>
+<td>一名考生在理论考试中被发现有作弊嫌疑，监考人员应立即（）。</td>
+<td>A.没收其试卷并驱逐出考场 B.立即报告考场负责人 C.如实记录现场情况 D.当场宣布其成绩作废 E.对可疑物品、行为等进行取证和固定</td>
+<td>BCE</td>
+</tr>
+<tr class="even">
+<td>72</td>
+<td>考评人员职业道德的基本原则是公正，体现在（）。</td>
+<td>A.人格的平等 B.考评标准的平等 C.结果的优先 D.过程的公开 E.个人的廉洁</td>
+<td>ABD</td>
+</tr>
+<tr class="odd">
+<td>73</td>
+<td>考评人员应熟悉考评职业的（）。</td>
+<td>A.职业标准 B.认定内容 C.认定方法 D.认定费用 E.认定流程</td>
+<td>ABCDE</td>
+</tr>
+<tr class="even">
+<td>74</td>
+<td>技能人才评价命题工作的有效性是指（）。</td>
+<td>A.试题试卷内容应与考评蓝图所确定的考评内容保持一致，能够完整体现职业标准要求 B.考评结果应与考生的技能水平或日常的工作表现等基本一致 C.考评结果只与所要考查的职业素养、理论知识、操作技能和工作业绩等因素有关，不涉及其它与考评无关的项目 D.依据考评结果所做的人才使用决策和反馈建议有多个方面的独立验证，客观、恰当且有效 E.能够确保较低的试题通过率</td>
+<td>ABCD</td>
+</tr>
+<tr class="odd">
+<td>75</td>
+<td>根据浙技评〔2024〕16号文件规定，评价机构有下列行为之一的，由评价机构监管部门对其主要负责人进行约谈，提醒其规范操作。()</td>
+<td>A.未按评价标准执行，或未按有关规定实施考培分离 B.未及时公开评价计划，或无正当理由未按公开的评价计划执行 C.评价组织管理松懈，未按规定设置考场和配备工作人员 D.数字化监测预警信息异常，重点抽查后仍发现不符合要求 E.未按规定进行考生信息公示、成绩核定公示</td>
+<td>ABCDE</td>
+</tr>
+<tr class="even">
+<td>76</td>
+<td>根据国标，职业划分为（）三层。</td>
+<td>A.大类 B.中类 C.小类 D.细类 E.粗类</td>
+<td>ABD</td>
+</tr>
+<tr class="odd">
+<td>77</td>
+<td>技能人才评价考评人员证卡的制作要求有（）。</td>
+<td>A.证卡尺寸：80*120mm B.证卡底色：考评员为蓝色 C.证卡底色：高级考评员为蓝色 D.证卡底色：高级考评员为红色 E.发证机构名称须与人社部门备案名称一致</td>
+<td>ABDE</td>
+</tr>
+<tr class="even">
+<td>78</td>
+<td>浙江省职业技能等级证书编号包括（）。</td>
+<td>A.评价机构代码 B.证书核发年份代码 C.职业技能等级代码 D.证书序列号 E.证书验证码</td>
+<td>ABCD</td>
+</tr>
+</tbody>
+</table>
+<h1 id="通用知识考试样题二">通用知识考试样题（二）</h1>
+<blockquote>
+<p>页码：‑250‑ ~‑256‑</p>
+</blockquote>
+<h2 id="一单项选择题共60题每题1分共60分">一、单项选择题（共60题，每题1分，共60分）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>题号</th>
+<th>题干</th>
+<th>选项</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>深化技能人才评价制度改革的意见提出:技能人才评价要更趋科学，要遵循技能人才成长规律，以职业能力为导向，注重（A）培育，建成涵盖品德、知识、能力、业绩等多维要素。</td>
+<td>A.工匠精神 B.劳模精神 C.劳动精神 D.职业道德</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>完善职业资格制度改革，对现行《国家职业资格目录》以内的技能类职业（工种），实行职业资格制度，由（）按照有关规定组织实施。</td>
+<td>A.职业技能考核鉴定机构 B.职业技能等级认定机构 C.用人单位 D.社会培训评价组织</td>
+<td>A</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>深化技能人才评价制度改革的意见提出，对现行《国家职业资格目录》以外的技能类职业（工种），实行职业技能等级制度，按照有关规定组织实施，并颁发（）证书。</td>
+<td>A.职业技能等级证书 B.国家职业资格证书， C.行业职业资格证书 D.专项职业能力证书</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>4.完善新时代技能人才职业技能等级制度，全面落实（）评价主体权，激发市场主体活力，显著提升政府宏观管理、公共服务、监督保障能力。</td>
+<td>A.用人单位 B人社部门 C行业协会 D培训机构</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5.遵循技能人才成长规律，建成涵盖品德、知识、能力、业绩等多维要素，科学合理、客观公正的评价体系，让（）价值得到充分尊重和体现。</td>
+<td>A 培训老师 B 知识分子 C 专业技术人员 D 技能人才</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6.充分发挥以评促培、以评促用的正向激励作用，畅通技能人才成长路径，优化技能人才结构，改善（）局面。</td>
+<td>A 高技能人才短缺 B技能劳动者过剩 C 技能人才短缺 D专业技术人员过剩</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7.鼓励符合条件的用人单位对（）自主开展技能人才评价。</td>
+<td>A.在校学生 B.外单位员工 C.社会人员 D.本单位职工</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8.对尚无国家职业技能标准的职业（工种），要加大力度开发（）。</td>
+<td>A.技能标准 B.专项职业规范 C.评价规范 D.企业标准</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9.《中华人民共和国职业教育法》于（）第十三届全国人民代表大会常务委员会第三十四次会议修订。</td>
+<td>A.1986年 B.1996年 C.2006年 D.2022年</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>未列入国家职业资格目录的职业（）</td>
+<td>A.仍按原方法实施职业技能鉴定 B.一律由人社部统一实施职业技能鉴定 C.一律不得实施职业技能鉴定 D.一律由相关行业协会实施职业技能鉴定</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>操作技能考核是技能人才评价的核心，下面不属于操作技能考核试卷基本构成的是（）</td>
+<td>A.操作技能考核试卷答案 B.材料准备通知单 C.试卷正文 D.评分标准（评分记录表）</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td>不属于国家职业标准内容的是（）</td>
+<td>A.职业概况、基本要求 B.工作要求 C.比重表 D.职业培训大纲</td>
+<td>D</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>我省职业技能等级认定题库开发的依据是（）</td>
+<td>A.职业标准或职业规范 B.培训教材 C.职业标准和工人技术等级标准 D.岗位职责</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td>理论知识按照提问方式划分题型有填空、选择、判断、简答、计算、论述，这些题型有的是主观题、有的是客观题，请选出下面的客观题项。（）</td>
+<td>A、填空、选择、判断、简答、计算、论述 B、填空、选择、判断、简答 C、选择、判断、判断 D、填空、选择、判断、简答、计算</td>
+<td>C</td>
+</tr>
+<tr class="odd">
+<td>16、（）不是题库的优点。</td>
+<td>A、科学 B、有效 C、稳定 D、个性</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>17、国家职业标准制定的原则是（）</td>
+<td>A、整体性原则、等级性原则、职称性原则、实用性原则 B、整体性原则、职称性原则、规范性原则、实用性原则 C、整体性原则、等级性原则、规范性原则、实用性原则 D、可操作性原则、时效性与永久性并存的原则</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>18、2015版的《中华人民共和国职业分类大典》的职业包括（）个大类、75个中类、434个小类、1481个细类（职业）</td>
+<td>A、6 B、7 C、8 D、9</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>19、国家职业标准中，对职业等级进行了划分，一般分为（）等级</td>
+<td>A、初级工、中级工、高级工 B、技师、高级技师、特级技师、首席技师 C、初级工、中级工、高级工、技师、高级技师 D、高级、技师、高级技师、特级技师</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>20、社会主义市场经济条件下的诚信（）</td>
+<td>A、只是一种法律规范 B、只是一种道德规范 C、既是法律规范，又是道德规范 D、既不是法律规范，也不是道德规范</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>21、我国于1999颁布了第一版（）</td>
+<td>A、《中华人民共和国职业教育法》 B、《中华人民共和国劳动法》 C、《中华人民共和国职业分类大典》 D、《工人考核条例》</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>22、考评员职业道德的基本原则就是（）</td>
+<td>A、群体性原则 B、社会性原则 C、灵活性原则 D、公正性原则</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>23、特征参数“X、Y、Z”分别代表（）重要程度</td>
+<td>A、偏低、一般、高 B、偏高、高、一般 C、一般、高、偏低 D、高、一般、偏低</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>24、以下不属于职业分类基本内容的是（）</td>
+<td>A、职业类别编码 B、职业描述 C、职业任职标准 D、职业名称</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>25、（）是职业技能鉴定的核心内容，是区别于其他考试制度的突出特征。</td>
+<td>A.职业分类 B.操作技能考核 C.理论知识考核 D.职业技能国家题库</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>26、命题包括：①编制试题；②制定鉴定要素细目表；③分析职业标准；④编制试卷；⑤编制组卷模型；。基本步骤应该是（）</td>
+<td>A、②③①⑤④ B、③②①⑤④ C、③①②⑤④ D、①②③⑤④</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>27、目前实行的《中华人民共和国职业分类大典》是（）年颁布的。</td>
+<td>A、1991 B、1995 C、1999 D、2015</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>28、推行职业资格证书制度必须坚持（A）基本原则。</td>
+<td>A、社会效益第一、质量第一个 B、经济效益和社会效益优先 C、社会效益优先，经济效益兼顾 D、质量第一，经济社会效益并存</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>29、职业技能等级认定属于（）考试。</td>
+<td>A、常模 B、常规 C、标准参照性 D、标准性</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>30、考评机构应组织（）名以上具有考评资格的人员成立考评组。</td>
+<td>A、3 B、5 C、10 D、20</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>31、国家职业资格证书由（）统一印制。</td>
+<td>A、人力资源和社会保障部 B、各级劳动和社会保障行政部门 C、国家各有关行业主管部门 D、各级人民政府</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>32、为确保评价工作的公平、公开、公正，规定考评员执行考评任务时实行（）</td>
+<td>A轮换制 B、集训制 C、小组制 D、督导制</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>33、国家职业标准充分体现（）</td>
+<td>A、制约性原则 B、保密性原则 C、程序性原则 D、公正性原则</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>34、每个考评流程都要引标据法，有规则有则，这个体现为考评工作（）特征</td>
+<td>A、标准性和规范性 B、技术性和复杂性 C、独立性和权威性 D、变化性和创新性</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>35、按答案是否唯一，评分者本人的主观意愿是否影响评分等因素划分，题型可以分为（）两种类型。</td>
+<td>A、判断题和简答题 B、主观题和客观题 C、简答题和论述题 D、论述题和填空题</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>36、下列项目属于考评员工作任务的是（）</td>
+<td>A、开发题库 B、编制技能项目 C、考核评分 D、监督证书核发</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>37、考评人员的聘任期为（）</td>
+<td>A、1年 B、2年 C、3年 D、4年</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>38、技能人才评价是一项技术性、政策性很强的工作，同时，技能人才评价制度也会随着社会发展、人才队伍建设发展不断地改进和完善，因此考评人员要做到（）。</td>
+<td>A、举止文明，礼貌待人 B、爱岗敬业，尽职尽责 C、公平公正，廉洁自律 D、钻研技术，精益求精</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>39、考评员需要不断学习，探索考评技术和方法，以适应科学技术与劳动方式的变化与发展，体现了考评工作（）的特征。</td>
+<td>A、独立性和权威性 B、标准型和规范性 C、技术性和负责性 D、变化性和创新性</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>40、在评价过程中出现有争议的技术问题时，由（）负责最终裁决。</td>
+<td>A、质量督导人员 B、全体考评组成员 C、考评组组长 D、命题专家</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>41、我国职业资格制度改革要求，（）准入类职业资格并严格管理，推进水平类资格评价市场化、社会化。</td>
+<td>A.清理减少 B.加快增加 C.平稳保持 D.全部取消</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>42、职业道德是人们在（）中应遵循的特定职业规范和行为准则。</td>
+<td>A.市场经济 B.就业活动 C.职业活动 D.劳动活动</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>43、评价机构分为用人单位和社会培训评价机构，职业技能等级证书编码规则规定（）为用人单位证书代码。</td>
+<td>A．Y B．X C．J D．I</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>44、职业技能等级证书编码规则规定第16位阿拉伯数字代表（）</td>
+<td>A．技能等级 B．发证年份 C．机构代码 D．流水号</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>45、鉴定点的重要程度分别用“X、Y、Z”表示，重要程度的数量分布一般是X占（）以上。</td>
+<td>A.70% B.80% C.85% D.90%</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>46、（）考评是一种直接的非文字的考试，它的基本特征通过现场全真、半真、模拟技能操作完成考核项目。</td>
+<td>A.应用类 B.综合类 C.论文类 D.操作类</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>47、钳工初级工要求能读懂简单零件图，而中级工要求读懂零件工作图及简单机构的装配图，这体现了（）。</td>
+<td>A.职业活动的水平 B.职业活动的要求 C.职业活动的范围 D.职业活动的差异</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>48、以下哪一项属于职业技能（）。</td>
+<td>A.会计小红的机动车驾驶技能 B.家庭主妇日常在家中所运用的插花技能 C.大学生小明课余学习的营养知识 D.小明在一家星级酒店西餐厅厨房工作，他所掌握的面包烘焙技能。</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>49、考评工作中考试结果不受任何部门、个人的干预权利。是考评工作的哪个特征（）。</td>
+<td>A.技术性 B.创新新 C.变化性 D.独立性和权威性</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>50、考评员要熟悉本职业（工种）的（）的结构内容、工作要求、权重分配等内容。</td>
+<td>A.职业技能标准 B.培训教材 C.培训练习题 D.工作任务书</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>51、开考前考评员要负责检查考核场地、设备、工量具及原材料等是否符合（）要求。</td>
+<td>A.职业技能标准 B.考评要求 C.培训内容 D.培训难度</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>52、如果用符号表达职业、工种和岗位的关系，以下表述正确的是（）。</td>
+<td>A、职业＞工种＞岗位 B、岗位＞工种＞职业 C、工种＞职业＞岗位 D、职业‑工种=岗位</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>53、国家职业标准核心内容是（）。</td>
+<td>A.职业概况 B.工作要求 C.比重表 D.基本要求</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>54、国家职业标准制定的原则是（）</td>
+<td>A.整体性原则、等级性原则、职称性原则、实用性原则 B.整体性原则、职称性原则、规范性原则、实用性原则 C.整体性原则、等级性原则、规范性原则、实用性原则 D.可操作性原则、时效性与永久性并存的原则</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>55、考生进入考位，考评人员应查验考生的（）、身份证是否与应考人、应考工种和级别相符。</td>
+<td>A．服装 B．考试用品 C．测量工具 D．准考证</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>56、浙人社发〔2019〕66号文件规定，下列（）不可以申请开展我省企业职业技能等级认定工作。</td>
+<td>A.中央企业 B.上市企业 C.行业协会 D.县级企业</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>57、浙人社发〔2020〕6号文件规定，下列（）可以申请开展我省职业技能等级认定工作。</td>
+<td>A、技工学校 B、高职学校 C、本科院校 D、行业协会</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>58、职业技能等级可认定的职业一般是指（）中的技能类的职业（准入类除职业外）。</td>
+<td>A.《中华人民共和国职业分类大典》 B.《中华人民共和国劳动法》 C.《中华人民共和国职业教育法》 D.《工人考核条例》</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>59、职业技能等级证书由（）设计、打印和核发。</td>
+<td>A.国家人力资源和社会保障部 B.各级人力资源社会保障部门 C.各职业技能等级认定评价机构 D.各级人民政府</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>60、职业技能等级证书的发放原则是（）。</td>
+<td>A.谁认定 谁发证 谁负责 B.谁监管 谁发证 谁负责 C.谁备案 谁鉴定 谁发证 D.谁备案 谁鉴定 谁发证</td>
+<td>A</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>61、考评人员分为考评员和高级考评员，考评员可承担（）的技能人才评价工作，高级考评员可承担初、中、高级工和技师、高级技师的考评工作。</td>
+<td>A．初级工 和中级工 B．初、中、高级工 C．中级工和高级工 D.初、中、高级工和技师</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>61（A）是国家职业标准反映的职业能力水平的梯度。</td>
+<td>A、等级性原则 B、实用性原则 C、可操作性原则 D、整体性原则</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>63、（）原则是指国家职业标准反映的职业能力水平的梯度，它是由从业人员职业活动范围的宽窄、工作责任的大小和工作难度的高低决定的。</td>
+<td>A、梯度性 B、等级性 C、规范性 D、操作性</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>64高级工操作技能模块分数是依据国家职业标准的（）确定的。</td>
+<td>A、职业活动内容 B、比重表 C、工作内容 D、能力要求</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>65考评人员实施阅卷评分时，以下说法错误的是（）。</td>
+<td>A、阅卷评分过程中必须屏蔽考生个人信息 B、一份试卷（工件、作品）须由两名或以上考评人员评阅，并在相应的评分栏签名 C、负责统分的，应在统分人栏签名 D、当发现装订不规范的试卷或试题、参考答案有误等异常情况，无需向考评组长报告，可自行处理</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>66.经验型命题有（）缺点。</td>
+<td>A、能够充分反映内容专家的经验 B、单批次命题速度较快 C、应用针对性较强 D、不可以重复使用</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>67.配分与评分标准一般以评分记录表方式体现。评分记录表中一般不设（）项。</td>
+<td>（A）否决项 （B）考核内容 （C）考核要点 （D）重要程度</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>68.操作技能考试时间应根据实际情况确定，总时间应符合（）。</td>
+<td>（A）行业标准 （B）国家规定 （C）企业标准 （D）区域差异情况</td>
+<td>B</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>69.理论知识考试中每个考场应（）监考人员。</td>
+<td>（A）1名 （B）2名 （C）不少于2名 （D）不少于1名</td>
+<td>C</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>70.下列关于技能要求的表述，较规范的是（）。</td>
+<td>A.了解材料的性质、特点 B.掌握零件的加工工艺 C.熟悉设备的结构和工作原理 D.能使用平面磨床磨削工件</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>71.国家职业资格证书编码一共有（）位阿拉伯数字组成。</td>
+<td>A．21 B．19 C．18 D．16</td>
+<td>D</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>72.职业技能等级证书编码由字母和数字组成，其中数字有（）位阿拉伯数字组成。</td>
+<td>A．21 B．19 C．18 D．16</td>
+<td>D</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="二多选题共10题每题2分共20分">二、多选题（共10题，每题2分，共20分）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>题号</th>
+<th>题干</th>
+<th>选项</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1、能够反映诚实守信基本要求的做法是（）。</td>
+<td>A、忠诚所属企业 B、掩盖企业内幕 C、无条件维护企业形象 D、保守企业秘密</td>
+<td>AD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2、为规范考评过程，对考评人员建立（）基本管理制度</td>
+<td>A、集训制度 B、轮换制度 C、回避制度 D、年度考核和评议制度 E、质量督导制度</td>
+<td>ABCDE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3、技能人才评价考务管理的遵循原则是（）</td>
+<td>A、公正性原则 B、程序化原则 C、保密性原则 D、制约性原则 E、个性化原则</td>
+<td>ABCD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4、考评人员对考评现场发生的考生个人违纪行为，视情节轻重可以作出（）处置的权利。</td>
+<td>A、劝告 B、警告 C、终止考试 D、宣布考试成绩无效</td>
+<td>ABCD</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5、考评工作是人才评价的重要组成部分，具有以下（）特征。</td>
+<td>A、标志性 B、复杂性 C、变化性 D、独立性</td>
+<td>BCD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6、对技能人才评价工作进行质量督导的主要形式有（）</td>
+<td>A、在线督考 B、现场督考 C、维护秩序 D、质量检查</td>
+<td>ABD</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7、行业协会、学会等社会组织和企事业单位依据市场需要自行开展能力水平评价活动，不得变相开展资格资质许可和认定，证书不得使用（）等字样和国徽标志。</td>
+<td>A.“中华人民共和国”、“中国”或“中华” B.“职业资格”或“人员资格” C.地方地方标志标识 D.政府管理部门的名称</td>
+<td>ABCD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8、考评人员职业道德特征是（）</td>
+<td>A、奉献 B、技术高超 C、廉洁公正 D、精益求精</td>
+<td>ACD</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9、选拔考评人员的原则（）</td>
+<td>A.从事本职业的资历较长 B.通晓本职业专业知识和操作技能 C.应具有一定的代表性 D.热爱技能人才评价事业</td>
+<td>BCD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10、操作技能试题中的考核要求主要包括（）。</td>
+<td>（A）本题分值 （B）考核形式 （C）考核时间 （D）否定项说明 （E）具体考核要求</td>
+<td>ABCDE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>11、技能人才评价专家队伍是指（）</td>
+<td>A、考评人员队伍 B、裁判人员队伍 C、质量督导员队伍 D、考务管理队伍 E、培训师资队伍</td>
+<td>ABC</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>12、质量督导员的工作方法主要有（）</td>
+<td>A、现场观察法 B、抽样评估法 C、信息反馈法 D、定期检查法 E、不定期检查法</td>
+<td>ABCDE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>13、一般而言，职业具有（）特性</td>
+<td>A、群体性 B、社会性 C、灵活性 D、广泛性</td>
+<td>AB</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>14、技能人才评价考务管理的遵循原则是（）</td>
+<td>A、公正性原则 B、程序化原则 C、保密性原则 D、制约性原则 E、个性化原则</td>
+<td>ABCD</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>15、评价环境会对评价结果产生影响并引起误差，其误差因素主要包括：（）</td>
+<td>A、设备场地 B、考评人员情况 C、评分误差 D、评价标准</td>
+<td>ABCD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>16、爱岗敬业的具体要求主要是：（）</td>
+<td>A、公私分明 B、树立职业理想 C、强化职业责任 D、提高职业技能</td>
+<td>ABC</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>17、职业道德是人格的一面镜子，体现在（）。</td>
+<td>A、人的职业道德品质反映着人的整体素质 B、人的职业道德的提高有利于人的思想素质的全面提高 C、从事一定的职业是人的需求 D、道德随着社会经济的发展而变化变化</td>
+<td>ABC</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>18、职业道德具有（）。</td>
+<td>A、连续性 B、历史继承性 C、民族性 D、时代性</td>
+<td>AB</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>19、职业道德的作用在于（）。</td>
+<td>A、降低产品废品率 B、加强技术创新 C、事业成功 D、提高竞争力</td>
+<td>ABCD</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>说明：图片中部分题号存在重复、跳号，已按图片原样保留；部分选项换行排版保留原始内容。</p>
+</blockquote></main></div>
+  </div>
+  <script>
+  (()=>{'use strict';const PASS='tsoishuntat',KEY='common-kb-auth';const qs=s=>document.querySelector(s),login=qs('#login'),app=qs('#app'),form=qs('#loginForm'),password=qs('#password'),error=qs('#error'),content=qs('#content'),search=qs('#search'),clear=qs('#clear'),sidebar=qs('#sidebar');
+    function showApp(){login.classList.add('hidden');app.classList.remove('hidden');buildToc();}
+    if(sessionStorage.getItem(KEY)==='1')showApp();
+    form.addEventListener('submit',e=>{e.preventDefault();if(password.value===PASS){sessionStorage.setItem(KEY,'1');error.textContent='';showApp();search.focus()}else{error.textContent=password.value?'密码不正确，请重试':'请输入访问密码';password.select()}});
+    qs('#reveal').addEventListener('click',e=>{const visible=password.type==='text';password.type=visible?'password':'text';e.currentTarget.textContent=visible?'显示':'隐藏'});
+    qs('#logout').addEventListener('click',()=>{sessionStorage.removeItem(KEY);location.reload()});
+    content.querySelectorAll('table').forEach(t=>{const w=document.createElement('div');w.className='table-wrap';t.parentNode.insertBefore(w,t);w.appendChild(t)});
+    function buildToc(){const toc=qs('#toc');if(toc.children.length)return;content.querySelectorAll('h1,h2').forEach((h,i)=>{h.id='section-'+i;const li=document.createElement('li');li.className='level-'+h.tagName.slice(1);const a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent;a.addEventListener('click',()=>sidebar.classList.remove('open'));li.appendChild(a);toc.appendChild(li)});}
+    const rows=[...content.querySelectorAll('tbody tr')];const blocks=[...content.children];let timer;function runSearch(){const q=search.value.trim().toLocaleLowerCase();clear.classList.toggle('hidden',!q);content.querySelectorAll('mark').forEach(m=>m.replaceWith(document.createTextNode(m.textContent)));if(!q){rows.forEach(r=>r.hidden=false);blocks.forEach(b=>b.hidden=false);return}rows.forEach(r=>r.hidden=!r.textContent.toLocaleLowerCase().includes(q));content.querySelectorAll('.table-wrap').forEach(w=>w.hidden=![...w.querySelectorAll('tbody tr')].some(r=>!r.hidden));blocks.forEach(b=>{if(!b.classList.contains('table-wrap')&&b.matches('p,blockquote'))b.hidden=!b.textContent.toLocaleLowerCase().includes(q)});rows.filter(r=>!r.hidden).forEach(r=>highlight(r,q))}
+    function highlight(root,q){const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);nodes.forEach(n=>{const text=n.data,idx=text.toLocaleLowerCase().indexOf(q);if(idx<0)return;const mark=document.createElement('mark');mark.textContent=text.slice(idx,idx+q.length);const after=n.splitText(idx);after.deleteData(0,q.length);after.parentNode.insertBefore(mark,after)})}
+    search.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(runSearch,100)});clear.addEventListener('click',()=>{search.value='';runSearch();search.focus()});qs('#menu').addEventListener('click',()=>sidebar.classList.toggle('open'));document.addEventListener('click',e=>{if(innerWidth<=800&&!sidebar.contains(e.target)&&!qs('#menu').contains(e.target))sidebar.classList.remove('open')});
+  })();
+  </script>
+</body></html>
